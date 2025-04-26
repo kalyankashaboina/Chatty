@@ -3,10 +3,11 @@ import { io, Socket } from "socket.io-client";
 
 let socket: Socket | null = null;
 
+const SOCKET_URL = import.meta.env.VITE_API_URL || 'https://chatty-server-uhm7.onrender.com';
 
 export const initializeSocket = (token: string): Socket => {
   if (!socket) {
-    socket = io(import.meta.env.VITE_API_URL, {
+    socket = io(SOCKET_URL, {
       query: { token },
       transports: ["websocket"], 
       withCredentials: true,     
