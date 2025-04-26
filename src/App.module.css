@@ -1,0 +1,117 @@
+:root {
+  --color-violet: #7c3aed;
+  --color-violet-light: #a78bfa;
+  --color-black: #09090b;
+  --color-white: #ffffff;
+}
+
+[data-mui-color-scheme="light"] {
+  --bg-color: var(--color-white);
+  --text-color: var(--color-black);
+  --button-bg: var(--color-violet);
+  --button-text: var(--color-white);
+}
+
+[data-mui-color-scheme="dark"] {
+  --bg-color: var(--color-black);
+  --text-color: var(--color-white);
+  --button-bg: var(--color-violet-light);
+  --button-text: var(--color-black);
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+  overflow: hidden;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+button {
+  background-color: var(--button-bg);
+  color: var(--button-text);
+  padding: 10px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.chattyContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 100vh;
+  padding: 2rem;
+  box-sizing: border-box;
+}
+
+.dialogBackdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.dialog {
+  background: var(--bg-color);
+  color: var(--text-color);
+  padding: 2rem;
+  border-radius: 8px;
+  min-width: 300px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.tabs {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 1rem;
+}
+
+.tab {
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  border-bottom: 2px solid transparent;
+}
+
+.tab.active {
+  border-color: var(--color-violet);
+}
+
+@media (max-width: 768px) {
+  .chattyContent {
+    padding: 1rem;
+  }
+
+  .dialog {
+    padding: 1.5rem;
+  }
+
+  .tabs {
+    flex-direction: column;
+  }
+
+  .tab {
+    padding: 1rem;
+    width: 100%;
+    text-align: center;
+  }
+}

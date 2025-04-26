@@ -1,0 +1,13 @@
+.inputArea {
+    padding: 16px;
+    display: flex;
+    gap: 8px;
+    border-top: 1px solid #ddd;
+    background-color: #fff;
+    padding-bottom: 20px;
+  }
+  
+  .inputField {
+    width: 100%;
+  }
+  

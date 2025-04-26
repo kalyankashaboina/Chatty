@@ -1,0 +1,79 @@
+/* Chat container styles */
+.chatArea {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  flex-grow: 1;
+}
+
+/* Chat Body (scrollable) */
+.chatBody {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 8px 16px;
+  background-color: #f9f9f9;
+}
+
+/* Chat Input container (pinned to the bottom) */
+.chatInput {
+  padding: 8px 16px;
+  border-top: 1px solid #ddd;
+  background-color: #fff;
+  flex-shrink: 0;
+}
+
+/* Empty chat container when no user is selected */
+.emptyChat {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  flex-grow: 1;
+  background-color: #fafafa;
+}
+
+.emptyChat .emptyMessage {
+  text-align: center;
+  color: #888;
+}
+
+/* Chat header (fixed position at the top) */
+.chatHeader {
+  padding: 12px 16px;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+  background-color: #fff;
+  z-index: 1;
+}
+
+/* Dialog for unavailable feature (overlay dialog) */
+.dialogContent {
+  background-color: #f3f4f6;
+  padding: 20px;
+  text-align: center;
+}
+
+.dialogTitle {
+  background-color: #8a2be2;
+  color: #fff;
+  text-align: center;
+  font-weight: bold;
+}
+
+.dialogActions {
+  justify-content: center;
+  padding-bottom: 20px;
+}
+
+.closeButton {
+  background-color: #8a2be2;
+  color: #fff;
+  padding: 8px 16px;
+}
+
+.closeButton:hover {
+  background-color: #7a1ab1;
+}

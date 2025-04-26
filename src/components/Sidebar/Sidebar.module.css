@@ -1,0 +1,120 @@
+/* Sidebar container */
+.sidebar {
+  width: 280px;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #ccc;
+  max-height: 100vh;
+  background-color: #ffffff; /* Sidebar background */
+}
+
+/* Sidebar header styling */
+.sidebarHeader {
+  background-color: #805ad5; /* Violet background */
+  color: #ffffff; /* White text */
+  padding: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid #ddd;
+  flex-shrink: 0;
+}
+
+/* Search box styling */
+.searchBox {
+  padding: 12px 16px;
+  background-color: #f0f0f0;
+  border-bottom: 1px solid #ddd;
+}
+
+.searchBox input {
+  background-color: #ffffff;
+  border: 1px solid #805ad5;
+  color: #000000;
+  padding: 8px;
+  border-radius: 4px;
+  width: 100%;
+}
+
+/* Add User button styling */
+.addUserBtn {
+  background-color: #805ad5; /* Violet background */
+  color: #ffffff; /* White text */
+  font-weight: 500;
+  text-transform: none;
+  border-radius: 4px;
+  margin-top: 10px;
+}
+
+.addUserBtn:hover {
+  background-color: #9a79d1; /* Light violet on hover */
+}
+
+/* Sidebar List Styling */
+.sidebarList {
+  flex: 1;
+  overflow-y: auto;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Styling for each user list item */
+.sidebarList .MuiListItemButton-root {
+  padding: 12px 16px;
+  background-color: #edf2f7; /* Light background for each user */
+  border-radius: 6px;
+  margin-bottom: 8px; /* Space between items */
+  color: #000000; /* Black text for list items */
+  transition: background-color 0.3s ease;
+}
+
+/* Hover effect for user list item */
+.sidebarList .MuiListItemButton-root:hover {
+  background-color: #dfe8f3; /* Light hover effect */
+}
+
+/* Selected user styling */
+.sidebarList .MuiListItemButton-root.Mui-selected {
+  background-color: #805ad5; /* Violet background for selected */
+  color: #ffffff; /* White text for selected */
+}
+
+/* Avatar inside user item */
+.sidebarList .MuiListItemButton-root .MuiAvatar-root {
+  width: 40px;
+  height: 40px;
+}
+
+/* User info text */
+.sidebarList .MuiListItemButton-root .MuiTypography-root {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Styling for the last message and timestamp */
+.userMessageDetails {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.userMessageDetails .lastMessage {
+  font-size: 12px;
+  color: #6c757d;
+}
+
+.time {
+  font-size: 12px !important;
+  /* font-weight: 200; */
+  color: #6c757d;
+}
+
+
+/* userliststyle */
+.singleUser{
+  background-color: #EDF2F7;
+  padding: 7px 10px;
+  border-radius: 10px;
+}
+

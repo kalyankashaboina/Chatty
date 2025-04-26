@@ -1,0 +1,25 @@
+.chattyContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 82vh;
+    padding: 2rem;
+    box-sizing: border-box;
+  }
+  
+  .chattyContent h1 {
+    font-size: 3rem;
+    color: var(--color-violet);
+  }
+  
+  .chattyContent p {
+    font-size: 1.25rem;
+    color: var(--color-violet-light);
+  }
+  
+  .chattyContent .MuiStack-root {
+    margin-top: 2rem;
+  }
+  

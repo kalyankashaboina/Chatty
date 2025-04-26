@@ -1,0 +1,41 @@
+/* Hide back arrow by default (desktop/tablet) */
+.backArrow {
+  display: none !important;
+  color: red;
+}
+
+/* Show back arrow only on mobile (<=768px) */
+@media (max-width: 426px) {
+  .backArrow {
+    display: block !important;
+  }
+}
+
+.chatHeader {
+  height: 60px;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background-color: #805AD5;
+  color: #ffffff;
+  z-index: 1;
+}
+
+.leftSection {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.username {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.callButtons {
+  display: flex;
+  gap: 8px;
+}

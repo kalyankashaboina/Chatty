@@ -1,0 +1,12 @@
+.container {
+  display: flex;
+  height: 100vh;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+@media (max-width: 426px) {
+  .container {
+    flex-direction: column;
+    height: auto;
+  }
+}

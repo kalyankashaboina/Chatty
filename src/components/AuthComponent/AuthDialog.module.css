@@ -1,0 +1,29 @@
+.dialog {
+  background-color: #ffffff; /* White background */
+  color: #09090b; /* Black text */
+  padding: 2rem;
+  border-radius: 8px;
+  min-width: 300px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  margin: 10vh auto;
+}
+
+.tabs {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 1rem;
+}
+
+.tab {
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  border-bottom: 2px solid transparent;
+  transition: border-color 0.3s ease;
+}
+
+.active {
+  border-color: #7c3aed; /* Violet */
+}
