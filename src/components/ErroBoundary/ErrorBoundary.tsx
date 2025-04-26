@@ -1,6 +1,6 @@
 
 
-import React, { Component, ErrorInfo, ReactNode } from "react";
+import  { Component, ErrorInfo, ReactNode } from "react";
 
 // Define the types for props and state of the ErrorBoundary component
 interface ErrorBoundaryProps {
