@@ -1,7 +1,7 @@
 // App.tsx
 import { useEffect, useMemo, useState } from "react";
 import { ThemeProvider, createTheme, CssBaseline } from "@mui/material";
-import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, } from "react-router-dom";
 import Navbar from "./components/NavBar/Navbar";
 import Welcome from "./components/welcome/Welcome";
 import AuthDialog from "./components/AuthComponent/AuthDialog";
@@ -12,7 +12,7 @@ const App = () => {
   const [themeMode, setThemeMode] = useState<"light" | "dark">("light");
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [defaultTab, setDefaultTab] = useState<"login" | "register">("login");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
 
   useEffect(() => {
     document.body.setAttribute("data-mui-color-scheme", themeMode);

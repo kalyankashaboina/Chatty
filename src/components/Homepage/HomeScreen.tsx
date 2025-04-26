@@ -6,6 +6,10 @@ import Chat from "../Chat/Chat";
 import { User, ChatMessage } from "../../../types";
 import { getSocket, initializeSocket } from "../../utils/socket";
 import axiosInstance from "../../utils/axios";
+type RawUser = {
+  _id: string;
+  fullName: string;
+};
 
 const HomeScreen: React.FC = () => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
@@ -26,7 +30,7 @@ const HomeScreen: React.FC = () => {
     const fetchUsers = async () => {
       try {
         const response = await axiosInstance.get("/api/sidebar");
-        const mappedUsers: User[] = response.data.users.map((user: any) => ({
+        const mappedUsers: User[] = response.data.users.map((user:RawUser) => ({
           id: user._id,
           username: user.fullName,
         }));

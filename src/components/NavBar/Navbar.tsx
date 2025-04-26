@@ -2,9 +2,7 @@ import React from "react";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
-import { Brightness4, Brightness7 } from "@mui/icons-material";
-import Stack from "@mui/material/Stack";
+
 
 interface NavbarProps {
   onToggleTheme: () => void;
