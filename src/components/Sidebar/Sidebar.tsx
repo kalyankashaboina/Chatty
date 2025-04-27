@@ -25,10 +25,11 @@ const Sidebar: React.FC<SidebarProps> = ({
   selectedUser,
   setSelectedUser,
 }) => {
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
+  // Safe filtering with optional chaining
   const filteredUsers = users.filter((user) =>
-    user.username.toLowerCase().includes(searchQuery.toLowerCase())
+    user.username?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
@@ -73,23 +74,18 @@ const Sidebar: React.FC<SidebarProps> = ({
                 direction="row"
                 spacing={2}
                 alignItems="center"
-                sx={{ width: "100%"
-
-          
-                }}
+                sx={{ width: "100%" }}
                 className={styles.singleUser}
               >
                 {/* Profile Picture and User Info */}
                 <Box>
                   <Avatar
-                    src={user.profilePic || undefined}
+                    src={user.profilePic || undefined} // Use fallback value
                     alt={user.username}
                     sx={{
                       width: 40,
                       height: 40,
                       position: "relative",
-
-                     
                     }}
                   >
                     <FiberManualRecord
@@ -98,7 +94,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                         top: 3,
                         right: 5,
                         fontSize: 12,
-                        color: user.isOnline ? "#805ad5" : "gray",
+                        color: user.isOnline ? "#805ad5" : "gray", // Safe check for online status
                         backgroundColor: "#fff",
                         borderRadius: "50%",
                       }}
@@ -121,7 +117,9 @@ const Sidebar: React.FC<SidebarProps> = ({
                       justifyContent: "space-between",
                     }}
                   >
-                    <Typography sx={{whiteSpace:"nowrap"}}>{user.username}</Typography>
+                    <Typography sx={{ whiteSpace: "nowrap" }}>
+                      {user.username || "No Username"} {/* Safe fallback */}
+                    </Typography>
                     <Typography className={styles.time}>Today</Typography>
                   </Box>
 
@@ -132,41 +130,6 @@ const Sidebar: React.FC<SidebarProps> = ({
                   </Box>
                 </Box>
               </Stack>
-
-              {/* <Stack direction="row" spacing={2} alignItems="center">
-                <Box position="relative" sx={{ display: "inline-block" }}>
-                  <Avatar
-                    src={user.profilePic || undefined}
-                    alt={user.username}
-                    sx={{ width: 40, height: 40 }}
-                  />
-                  <FiberManualRecord
-                    sx={{
-                      position: "absolute",
-                      bottom: 0,
-                      right: 0,
-                      fontSize: 12,
-                      color: user.isOnline ? "#805ad5" : "gray",
-                      backgroundColor: "#fff",
-                      borderRadius: "50%",
-                    }}
-                  />
-                </Box>
-
-                <Box sx={{ flex: 1 ,width: "100%"}}>
-                  <Box sx={{ display: "flex", justifyContent: "space-around"}}>
-                  <Typography>{user.username}</Typography>
-                  <Typography className={styles.time}>Today</Typography>
-                  </Box>
-                 
-                  <Box className={styles.userMessageDetails}>
-                    <Typography className={styles.lastMessage}>
-                      Last message here
-                    </Typography>
-                    
-                  </Box>
-                </Box>
-              </Stack> */}
             </ListItemButton>
           ))
         ) : (
