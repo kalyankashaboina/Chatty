@@ -1,12 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Modal,
-  Paper,
-  Typography,
-  Stack,
-  TextField,
-  Button,
-} from "@mui/material";
+import { Modal, Paper, Typography, Stack, TextField, Button } from "@mui/material";
 import styles from "./AuthDialog.module.css";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../utils/axios";
@@ -27,7 +20,7 @@ const AuthDialog: React.FC<AuthDialogProps> = ({
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
-  const [welcomeMessage, setWelcomeMessage] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -35,42 +28,27 @@ const AuthDialog: React.FC<AuthDialogProps> = ({
   }, [defaultTab]);
 
   const handleLogin = async () => {
+    setLoading(true);
     try {
       const response = await axiosInstance.post("/api/login", { email, password });
 
-      localStorage.setItem("token", response.data.token);
-      localStorage.setItem("user", JSON.stringify({
-        id: response.data.user._id,
-        username: response.data.user.fullName,
-      }));
+     
+      localStorage.setItem("user", JSON.stringify(response.data.user));
 
-      const socketConnection = initializeSocket(response.data.token);
+      const socketConnection = initializeSocket();
       socketConnection.on("connect", () => console.log("Connected to WebSocket"));
-      socketConnection.on("message", (message: string) => console.log(message));
-
+      
       navigate("/home");
     } catch (error) {
       console.error("Login failed:", error);
       alert("Login failed. Please check your credentials.");
+    } finally {
+      setLoading(false);
     }
   };
 
-  useEffect(() => {
-    const fetchWelcomeMessage = async () => {
-      try {
-        const response = await axiosInstance.get("/welcome");
-        setWelcomeMessage(response.data.message);
-      } catch (error) {
-        console.error("Error fetching welcome message:", error);
-      }
-    };
-
-    fetchWelcomeMessage();
-  }, []);
-
-  console.log("Welcome message:", welcomeMessage);
-
   const handleRegister = async () => {
+    setLoading(true);
     try {
       await axiosInstance.post("/api/register", { username, email, password });
       alert("Registration successful! You can now log in.");
@@ -78,27 +56,29 @@ const AuthDialog: React.FC<AuthDialogProps> = ({
     } catch (error) {
       console.error("Registration failed:", error);
       alert("Registration failed. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
   const textFieldStyles = {
     input: {
-      color: "#09090b", // Black color
+      color: "#09090b", 
       backgroundColor: "transparent",
-      caretColor: "#09090b", // Black color
+      caretColor: "#09090b", 
     },
     label: {
-      color: "#09090b", // Black color
+      color: "#09090b", 
     },
     "& .MuiOutlinedInput-root": {
       "& fieldset": {
-        borderColor: "#a78bfa", // Light Violet
+        borderColor: "#a78bfa", 
       },
       "&:hover fieldset": {
-        borderColor: "#7c3aed", // Violet
+        borderColor: "#7c3aed", 
       },
       "&.Mui-focused fieldset": {
-        borderColor: "#7c3aed", // Violet
+        borderColor: "#7c3aed", 
       },
     },
   };
@@ -108,8 +88,8 @@ const AuthDialog: React.FC<AuthDialogProps> = ({
       <Paper
         className={styles.dialog}
         sx={{
-          backgroundColor: "#ffffff", // White background
-          color: "#09090b", // Black text color
+          backgroundColor: "#ffffff", 
+          color: "#09090b", 
           padding: 3,
           borderRadius: 2,
           boxShadow: 6,
@@ -154,8 +134,14 @@ const AuthDialog: React.FC<AuthDialogProps> = ({
               onChange={(e) => setPassword(e.target.value)}
               sx={textFieldStyles}
             />
-            <Button fullWidth variant="contained" sx={{ mt: 2, backgroundColor: "#7c3aed", color: "#ffffff" }} onClick={handleLogin}>
-              Login
+            <Button
+              fullWidth
+              variant="contained"
+              sx={{ mt: 2, backgroundColor: "#7c3aed", color: "#ffffff" }}
+              onClick={handleLogin}
+              disabled={loading}
+            >
+              {loading ? "Logging in..." : "Login"}
             </Button>
           </>
         )}
@@ -191,8 +177,14 @@ const AuthDialog: React.FC<AuthDialogProps> = ({
               onChange={(e) => setPassword(e.target.value)}
               sx={textFieldStyles}
             />
-            <Button fullWidth variant="contained" sx={{ mt: 2, backgroundColor: "#7c3aed", color: "#ffffff" }} onClick={handleRegister}>
-              Register
+            <Button
+              fullWidth
+              variant="contained"
+              sx={{ mt: 2, backgroundColor: "#7c3aed", color: "#ffffff" }}
+              onClick={handleRegister}
+              disabled={loading}
+            >
+              {loading ? "Registering..." : "Register"}
             </Button>
           </>
         )}

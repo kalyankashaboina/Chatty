@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Paper,
   List,
@@ -13,6 +13,8 @@ import {
 import { User } from "../../../types";
 import styles from "./Sidebar.module.css";
 import { FiberManualRecord } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
+import axiosInstance from "../../utils/axios";
 
 interface SidebarProps {
   users: User[];
@@ -25,19 +27,47 @@ const Sidebar: React.FC<SidebarProps> = ({
   selectedUser,
   setSelectedUser,
 }) => {
-  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
 
   // Safe filtering with optional chaining
   const filteredUsers = users.filter((user) =>
     user.username?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const handleLogout = async () => {
+    console.log("Logout clicked");
+    try {
+      await axiosInstance.post("/api/logout"); 
+      navigate("/");
+    } catch (error) {
+      console.error("Error during logout:", error);
+      alert("Something went wrong while logging out.");
+    }
+  };
+
+  useEffect(() => {
+    // Logging when a user goes online/offline
+    users.forEach((user) => {
+      if (user.isOnline) {
+        console.log(`${user.username} is now online`);
+      } else {
+        console.log(`${user.username} is offline`);
+      }
+    });
+  }, [users]);
+
   return (
     <Paper elevation={2} className={styles.sidebar}>
       {/* Sidebar header */}
-      <Typography variant="h6" className={styles.sidebarHeader}>
-        Users
-      </Typography>
+      <Box className={styles.sidebarHeaderContainer}>
+        <Typography variant="h6" className={styles.sidebarHeader}>
+          Users
+        </Typography>
+
+        {/* Logout Button - Only on mobile */}
+        <Button className={styles.logoutButton} variant="contained" onClick={handleLogout}>Logout</Button>
+      </Box>
 
       {/* Search box */}
       <Box className={styles.searchBox}>
@@ -51,7 +81,7 @@ const Sidebar: React.FC<SidebarProps> = ({
         />
       </Box>
 
-      {/* Add User Button */}
+      {/* Add User button */}
       <Button
         fullWidth
         className={styles.addUserBtn}
@@ -91,12 +121,13 @@ const Sidebar: React.FC<SidebarProps> = ({
                     <FiberManualRecord
                       sx={{
                         position: "absolute",
-                        top: 3,
-                        right: 5,
+                        bottom: 0,
+                        right: 0,
                         fontSize: 12,
-                        color: user.isOnline ? "#805ad5" : "gray", // Safe check for online status
+                        color: user.isOnline ? "#44b700" : "gray", // Green if online
                         backgroundColor: "#fff",
                         borderRadius: "50%",
+                        border: "2px solid white",
                       }}
                     />
                   </Avatar>
@@ -118,7 +149,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                     }}
                   >
                     <Typography sx={{ whiteSpace: "nowrap" }}>
-                      {user.username || "No Username"} {/* Safe fallback */}
+                      {user.username}
                     </Typography>
                     <Typography className={styles.time}>Today</Typography>
                   </Box>

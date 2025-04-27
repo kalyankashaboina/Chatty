@@ -6,6 +6,9 @@
   border-right: 1px solid #ccc;
   max-height: 100vh;
   background-color: #ffffff; /* Sidebar background */
+  height: 100vh; /* Ensure sidebar takes full height */
+  display: flex;
+  flex-direction: column;
 }
 
 /* Sidebar header styling */
@@ -25,15 +28,7 @@
   padding: 12px 16px;
   background-color: #f0f0f0;
   border-bottom: 1px solid #ddd;
-}
-
-.searchBox input {
-  background-color: #ffffff;
-  border: 1px solid #805ad5;
-  color: #000000;
-  padding: 8px;
-  border-radius: 4px;
-  width: 100%;
+  flex-shrink: 0; /* Prevent search box from shrinking */
 }
 
 /* Add User button styling */
@@ -44,10 +39,7 @@
   text-transform: none;
   border-radius: 4px;
   margin-top: 10px;
-}
-
-.addUserBtn:hover {
-  background-color: #9a79d1; /* Light violet on hover */
+  flex-shrink: 0;
 }
 
 /* Sidebar List Styling */
@@ -57,6 +49,9 @@
   list-style: none;
   padding: 0;
   margin: 0;
+  padding-bottom: 20px; /* Ensure space for logout button */
+  display: flex;
+  flex-direction: column;
 }
 
 /* Styling for each user list item */
@@ -66,7 +61,10 @@
   border-radius: 6px;
   margin-bottom: 8px; /* Space between items */
   color: #000000; /* Black text for list items */
+  display: flex;
+  align-items: center;
   transition: background-color 0.3s ease;
+  min-height: 50px; /* Set a minimum height to ensure consistent alignment */
 }
 
 /* Hover effect for user list item */
@@ -84,12 +82,16 @@
 .sidebarList .MuiListItemButton-root .MuiAvatar-root {
   width: 40px;
   height: 40px;
+  margin-right: 16px; /* Space between avatar and text */
 }
 
 /* User info text */
 .sidebarList .MuiListItemButton-root .MuiTypography-root {
   font-size: 14px;
   font-weight: 500;
+  display: flex;
+  align-items: center; /* Align text vertically in the center */
+  flex: 1; /* Ensure the typography takes up remaining space */
 }
 
 /* Styling for the last message and timestamp */
@@ -106,15 +108,64 @@
 
 .time {
   font-size: 12px !important;
-  /* font-weight: 200; */
   color: #6c757d;
 }
 
+/* Online status dot */
+.sidebarList .MuiListItemButton-root .MuiAvatar-root .MuiSvgIcon-root {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  font-size: 12px;
+  color: #44b700; /* Green for online */
+  background-color: #fff;
+  border-radius: 50%;
+  border: 2px solid white;
+}
 
-/* userliststyle */
-.singleUser{
+/* User list style */
+.singleUser {
   background-color: #EDF2F7;
   padding: 7px 10px;
   border-radius: 10px;
 }
 
+/* Hide logout button by default (for large screens) */
+.logoutButton {
+  display: none !important;
+}
+
+@media (max-width: 456px) {
+  .sidebar {
+    width: 100%; /* Full width on smaller screens */
+    height: 100vh; /* Full viewport height */
+    position: fixed; /* Keep the sidebar fixed on the left */
+    top: 0;
+    left: 0;
+    bottom: 0;
+  }
+
+  .logoutButton {
+    display: block !important; /* Show logout button only on mobile */
+    margin-top: auto; /* Ensure the logout button is at the bottom */
+  }
+
+  .sidebar {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .sidebarHeaderContainer {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    background-color: #805ad5;
+    align-items: center;
+  }
+
+  /* Adjust the height of the typography to ensure consistent height for users on mobile */
+  .sidebarList .MuiListItemButton-root .MuiTypography-root {
+    height: 50px; /* Set height to ensure consistency */
+  }
+}

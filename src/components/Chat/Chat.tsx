@@ -18,8 +18,8 @@ interface ChatProps {
 const Chat: React.FC<ChatProps> = ({ selectedUser, messages, setMessages, setSelectedUser }) => {
   const [newMessage, setNewMessage] = useState("");
   const user = JSON.parse(localStorage.getItem("user") || "{}");
-  const myUserId = user?.id || "";
-
+  const myUserId = user?._id || "";
+console.log("My User ID:", myUserId);
   const messageListenerAttached = useRef(false);
 
   // Dialog state

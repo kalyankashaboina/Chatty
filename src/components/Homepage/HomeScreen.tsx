@@ -1,16 +1,18 @@
-// src/components/HomeScreen.tsx
-import { useEffect, useState } from 'react';
-import { Box, CircularProgress, Typography } from '@mui/material';
-import Sidebar from '../Sidebar/Sidebar';
-import Chat from '../Chat/Chat';
-import { User, ChatMessage } from '../../../types';
-import { getSocket, initializeSocket } from '../../utils/socket';
-import axiosInstance from '../../utils/axios';
-
+import { useEffect, useState } from "react";
+import { Box, CircularProgress } from "@mui/material";
+import styles from "./HomeScreen.module.css";
+import Sidebar from "../Sidebar/Sidebar";
+import Chat from "../Chat/Chat";
+import { User, ChatMessage } from "../../../types";
+import { initializeSocket } from "../../utils/socket";
+import axiosInstance from "../../utils/axios";
+import useSocketEvents from "../../../hooks/useSocketEvents"; // ✅ using the custom hook
 
 type RawUser = {
   _id: string;
-  fullName: string;
+  username: string;
+  isOnline?: boolean;
+  lastMessage?: string;
 };
 
 const HomeScreen: React.FC = () => {
@@ -18,64 +20,45 @@ const HomeScreen: React.FC = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [errorMessage, setErrorMessage] = useState<string>('');
   const [isMobileView, setIsMobileView] = useState<boolean>(window.innerWidth <= 426);
 
+  // ✅ Resize listener for mobile
   useEffect(() => {
     const handleResize = () => setIsMobileView(window.innerWidth <= 426);
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // ✅ Initialize socket on token presence
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) initializeSocket();
+  }, []);
+
+  // ✅ Fetch users for sidebar
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axiosInstance.get('/api/sidebar');
+        const response = await axiosInstance.get("/api/sidebar");
         const mappedUsers: User[] = response.data.users.map((user: RawUser) => ({
           id: user._id,
-          username: user.fullName,
+          username: user.username,
+
         }));
         setUsers(mappedUsers);
-        setLoading(false);
       } catch (error) {
-        setErrorMessage('Error fetching users. Please try again later.');
+        console.error("Error fetching users:", error);
+      } finally {
         setLoading(false);
-        console.error('Error fetching users:', error);
+        console.error('Error fetching users:');
       }
     };
 
     fetchUsers();
   }, []);
 
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) initializeSocket(token);
-  }, []);
-
-  useEffect(() => {
-    const socket = getSocket();
-    if (!socket) return;
-
-    if (selectedUser) socket.emit('getRecentMessages', selectedUser.id);
-
-    socket.on('recentMessages', (messages: ChatMessage[]) => setMessages(messages));
-    socket.on('userOnline', (userId: string) => {
-      setUsers((prev) =>
-        prev.map((user) => (user.id === userId ? { ...user, isOnline: true } : user))
-      );
-    });
-
-    socket.on('userOffline', (userId: string) => {
-      setUsers((prev) =>
-        prev.map((user) => (user.id === userId ? { ...user, isOnline: false } : user))
-      );
-    });
-
-    return () => {
-      socket.off('userOnline');
-      socket.off('userOffline');
-    };
-  }, [selectedUser]);
+  // ✅ Listen to real-time events (includes recentMessages on user select)
+  useSocketEvents({ selectedUser, setUsers, setMessages });
 
   if (loading) {
     return (
@@ -86,10 +69,7 @@ const HomeScreen: React.FC = () => {
   }
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
-      {errorMessage && <Typography color="error" sx={{ padding: 2 }}>{errorMessage}</Typography>}
-
-      {/* DESKTOP view: Show both sidebar and chat */}
+    <Box className={styles.container}>
       {!isMobileView && (
         <>
           <Sidebar users={users} selectedUser={selectedUser} setSelectedUser={setSelectedUser} />
@@ -103,7 +83,6 @@ const HomeScreen: React.FC = () => {
         </>
       )}
 
-      {/* MOBILE view */}
       {isMobileView && !selectedUser && (
         <Sidebar users={users} selectedUser={selectedUser} setSelectedUser={setSelectedUser} />
       )}
