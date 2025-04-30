@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, } from "react";
 import {
   Paper,
   List,
@@ -10,11 +10,11 @@ import {
   TextField,
   Button,
 } from "@mui/material";
-import { User } from "../../../types";
+import { User } from "../../types/types";
 import styles from "./Sidebar.module.css";
 import { FiberManualRecord } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-import axiosInstance from "../../utils/axios";
+import { logoutUser } from "../../services/authService";
 
 interface SidebarProps {
   users: User[];
@@ -38,7 +38,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   const handleLogout = async () => {
     console.log("Logout clicked");
     try {
-      await axiosInstance.post("/api/logout"); 
+      logoutUser()
       navigate("/");
     } catch (error) {
       console.error("Error during logout:", error);
@@ -46,16 +46,16 @@ const Sidebar: React.FC<SidebarProps> = ({
     }
   };
 
-  useEffect(() => {
-    // Logging when a user goes online/offline
-    users.forEach((user) => {
-      if (user.isOnline) {
-        console.log(`${user.username} is now online`);
-      } else {
-        console.log(`${user.username} is offline`);
-      }
-    });
-  }, [users]);
+  // useEffect(() => {
+  //   // Logging when a user goes online/offline
+  //   users.forEach((user) => {
+  //     if (user.isOnline) {
+  //       console.log(`${user.username} is now online`);
+  //     } else {
+  //       console.log(`${user.username} is offline`);
+  //     }
+  //   });
+  // }, [users]);
 
   return (
     <Paper elevation={2} className={styles.sidebar}>

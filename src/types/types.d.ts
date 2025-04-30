@@ -15,6 +15,6 @@ export interface ChatMessage {
   sender: string;
   receiver: string;
   content: string;         // ⬅️ renamed from `text` to `content`
-  type: MessageType;       // ⬅️ new field to define message type
-  timestamp?: Date | string; // optional: backend sends timestamp
+  type: MessageType;       
+  timestamp?: Date | string; 
 }

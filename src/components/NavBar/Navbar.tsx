@@ -3,26 +3,24 @@ import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import axiosInstance from "../../utils/axios";
-
+import { useNavigate } from "react-router-dom";
+import { logoutUser } from "../../services/authService"; 
 interface NavbarProps {
-  onToggleTheme: () => void;
-  themeMode?: "light" | "dark";
+  onToggleTheme: () => void;    
+  themeMode: "light" | "dark"; 
 }
-
 const Navbar: React.FC<NavbarProps> = () => {
+  const navigate = useNavigate();
 
-
-  // Handle logout functionality
   const handleLogout = async () => {
     try {
-      // Sending logout request to the server (logout API)
-      await axiosInstance.post("/api/logout");
+      await logoutUser(); // Call the logout service
+    
 
-      // After successful logout, redirect to login page (or wherever you want)
-    //  navigate("/login"); // This will redirect to the login page
-    } catch (error) {
+      navigate("/"); // Redirect to login after logout
+    } catch (error: any) {
       console.error("Logout error", error);
+      alert("Logout failed. Please try again.");
     }
   };
 
@@ -32,13 +30,7 @@ const Navbar: React.FC<NavbarProps> = () => {
         <Typography variant="h6" className="chatty-logo">
           💬 Chatty
         </Typography>
-
-        {/* Add Log Out Button */}
-        <Button
-          color="inherit"
-          onClick={handleLogout}
-          style={{ marginLeft: "auto" }} // Push the button to the right side
-        >
+        <Button color="inherit" onClick={handleLogout}>
           Log out
         </Button>
       </Toolbar>

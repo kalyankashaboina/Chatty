@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import { getSocket } from "../src/utils/socket";
-import { User, ChatMessage } from "../types";
+import { getSocket } from "../utils/socket";
+import { User, ChatMessage } from "../types/types";
 
 interface UseSocketEventsProps {
   selectedUser: User | null;
@@ -11,7 +11,7 @@ interface UseSocketEventsProps {
 const useSocketEvents = ({ selectedUser, setUsers, setMessages }: UseSocketEventsProps) => {
   useEffect(() => {
     const socket = getSocket();
-    if (!socket) return;
+    if (!socket) return; // ✅ Don’t reinitialize here
 
     // ✅ Emit recent messages request when selectedUser changes
     if (selectedUser) {
@@ -41,12 +41,12 @@ const useSocketEvents = ({ selectedUser, setUsers, setMessages }: UseSocketEvent
       );
     });
 
-    // ✅ Typing event (optional)
+    // ✅ Typing logs
     socket.on("typing", (username: string) => {
       console.log(`${username} is typing...`);
     });
 
-    // ✅ Handle reconnection attempts
+    // ✅ Reconnection logs
     socket.on("reconnect_attempt", () => {
       console.log("⚡ Attempting to reconnect...");
     });
@@ -64,7 +64,7 @@ const useSocketEvents = ({ selectedUser, setUsers, setMessages }: UseSocketEvent
       alert("Connection error. Please try again later.");
     });
 
-    // ✅ Cleanup socket listeners on component unmount or changes
+    // ✅ Cleanup listeners
     return () => {
       socket.off("recentMessages");
       socket.off("newMessage");
