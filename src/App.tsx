@@ -4,7 +4,7 @@ import { ThemeProvider, createTheme, CssBaseline } from "@mui/material";
 import { BrowserRouter, Routes, Route, } from "react-router-dom";
 import Navbar from "./components/NavBar/Navbar";
 import Welcome from "./components/welcome/Welcome";
-import AuthDialog from "./components/AuthComponent/AuthDialog";
+import AuthDialog from "./components/auth/AuthDialog";
 import HomeScreen from "./components/Homepage/HomeScreen";
 import ErrorBoundary from "./components/ErroBoundary/ErrorBoundary";
 

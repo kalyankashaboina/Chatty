@@ -3,10 +3,10 @@ import { Box, CircularProgress } from "@mui/material";
 import styles from "./HomeScreen.module.css";
 import Sidebar from "../Sidebar/Sidebar";
 import Chat from "../Chat/Chat";
-import { User, ChatMessage } from "../../../types";
+import { User, ChatMessage } from "../../types/types";
 import { initializeSocket } from "../../utils/socket";
 import axiosInstance from "../../utils/axios";
-import useSocketEvents from "../../../hooks/useSocketEvents"; // ✅ using the custom hook
+import useSocketEvents from "../../hooks/useSocketEvents";
 
 type RawUser = {
   _id: string;
@@ -50,7 +50,7 @@ const HomeScreen: React.FC = () => {
         console.error("Error fetching users:", error);
       } finally {
         setLoading(false);
-        console.error('Error fetching users:');
+
       }
     };
 

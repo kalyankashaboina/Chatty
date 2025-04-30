@@ -5,11 +5,22 @@ let socket: Socket | null = null;
 const SOCKET_URL = import.meta.env.VITE_API_URL || 'https://chatty-server-uhm7.onrender.com';
 
 export const initializeSocket = (): Socket => {
-  if (socket) return socket; // Return existing socket if already initialized
+  if (socket) return socket;  // Return the existing socket connection
+
+  const token = localStorage.getItem('token');
+  if (!token) {
+
+    console.error("❗ No token found. Cannot initialize socket.");
+
+  }
+
 
   socket = io(SOCKET_URL, {
     transports: ["websocket"],  // Use websocket transport
-    withCredentials: true,       // Ensure cookies are sent with the request
+    withCredentials: true,
+    query: {
+      token: token || "",
+    },
   });
 
   console.log("🔌 Socket initialized");
@@ -41,7 +52,7 @@ export const getSocket = (): Socket | null => {
 export const disconnectSocket = (): void => {
   if (socket) {
     socket.disconnect();
-    socket = null;
+    socket = null;  // Clear the socket reference
     console.log("❌ Socket manually disconnected");
   }
 };

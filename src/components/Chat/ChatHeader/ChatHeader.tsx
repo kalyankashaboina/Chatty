@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, IconButton, Typography } from "@mui/material";
 import { VideoCall, Call, ArrowBack } from "@mui/icons-material";
-import { User } from "../../../../types";
+import { User } from "../../../types/types";
 import styles from './ChatHeader.module.css';
 
 interface ChatHeaderProps {
@@ -17,8 +17,7 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ selectedUser, setSelectedUser, 
     }
   };
 
-  // Log the backArrow class to the console to check its value
-  console.log("BackArrow class:", styles.backArrow);
+
 
   return (
     <Box className={styles.chatHeader}>

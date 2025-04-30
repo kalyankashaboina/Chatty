@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Box, Dialog, DialogActions, DialogContent, DialogTitle, Button, Typography } from "@mui/material";
-import { ChatMessage, User } from "../../../types";
+import { ChatMessage, User } from "../../types/types";
 import ChatBody from "./ChatBody/ChatBody";
 import ChatInput from "./ChatInput/ChatInput";
 import ChatHeader from "./ChatHeader/ChatHeader";
@@ -19,18 +19,26 @@ const Chat: React.FC<ChatProps> = ({ selectedUser, messages, setMessages, setSel
   const [newMessage, setNewMessage] = useState("");
   const user = JSON.parse(localStorage.getItem("user") || "{}");
   const myUserId = user?._id || "";
-console.log("My User ID:", myUserId);
   const messageListenerAttached = useRef(false);
 
   // Dialog state
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
-
   useEffect(() => {
     const socket = getSocket();
-    if (!socket || messageListenerAttached.current) return;
+
+    if (socket) {
+      console.log("🔌 Socket initialized:", socket.id);
+    } else {
+      console.log("❌ No socket connection available.");
+      return;
+    }
+
+    // ✅ Only attach the message listener once
+    if (messageListenerAttached.current) return;
 
     socket.on("message", (message) => {
+      console.log("📥 Received message:", message);
       const isMe = message.senderId === myUserId;
 
       setMessages((prev) => [
@@ -47,11 +55,17 @@ console.log("My User ID:", myUserId);
 
     messageListenerAttached.current = true;
 
-    return () => {
-      socket?.off("message");
-      messageListenerAttached.current = false;
-    };
-  }, [selectedUser?.id, myUserId, setMessages]);
+    // ✅ Optional: one-time log for socket connection state
+    if (socket.connected) {
+      console.log("🔌 Socket connected:", socket.id);
+    } else {
+      socket.on("connect", () => console.log("🔌 Socket connected:", socket.id));
+      socket.on("disconnect", () => console.log("❌ Socket disconnected"));
+    }
+
+    // ✅ No need to remove listeners unless on logout
+  }, []);
+
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -91,6 +105,23 @@ console.log("My User ID:", myUserId);
 
     socket.emit("sendMessage", messagePayload);
     setNewMessage("");
+    console.log("📤 Sent message:", messagePayload);
+  };
+
+  const handleTyping = () => {
+    const socket = getSocket();
+    if (socket && selectedUser) {
+      console.log("Emitting 'typing' event for user:", selectedUser.id);
+      socket.emit("typing", { recipientId: selectedUser.id });
+    }
+  };
+
+  const handleStoppedTyping = () => {
+    const socket = getSocket();
+    if (socket && selectedUser) {
+      console.log("Emitting 'stoppedTyping' event for user:", selectedUser.id);
+      socket.emit("stoppedTyping", { recipientId: selectedUser.id });
+    }
   };
 
   const handleCall = (type: "audio" | "video") => {
@@ -140,7 +171,14 @@ console.log("My User ID:", myUserId);
 
       {/* Chat Input */}
       <Box sx={{ padding: "8px 16px", borderTop: "1px solid #ddd", backgroundColor: "#fff", flexShrink: 0 }}>
-        <ChatInput newMessage={newMessage} setNewMessage={setNewMessage} handleSendMessage={handleSendMessage} />
+        <ChatInput
+          newMessage={newMessage}
+          setNewMessage={setNewMessage}
+          selectedUserId={selectedUser.id}
+          handleSendMessage={handleSendMessage}
+          handleTyping={handleTyping}
+          handleStoppedTyping={handleStoppedTyping}
+        />
       </Box>
 
       {/* Dialog for unavailable features */}
