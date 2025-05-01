@@ -20,11 +20,11 @@ const HomeScreen: React.FC = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [isMobileView, setIsMobileView] = useState<boolean>(window.innerWidth <= 426);
+  const [isMobileView, setIsMobileView] = useState<boolean>(window.innerWidth <= 500);
 
   // ✅ Resize listener for mobile
   useEffect(() => {
-    const handleResize = () => setIsMobileView(window.innerWidth <= 426);
+    const handleResize = () => setIsMobileView(window.innerWidth <= 500);
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
@@ -62,7 +62,7 @@ const HomeScreen: React.FC = () => {
 
   if (loading) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100dvh' }}>
         <CircularProgress />
       </Box>
     );

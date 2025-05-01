@@ -5,8 +5,8 @@
   flex-direction: column;
   border-right: 1px solid #ccc;
   max-height: 100vh;
-  background-color: #ffffff; /* Sidebar background */
-  height: 100vh; /* Ensure sidebar takes full height */
+  background-color: #ffffff; 
+  height: 100dvh; /* Ensure sidebar takes full height */
   display: flex;
   flex-direction: column;
 }
