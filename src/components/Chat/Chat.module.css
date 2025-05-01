@@ -2,14 +2,16 @@
 .chatArea {
   display: flex;
   flex-direction: column;
-  height: 100%;
   flex-grow: 1;
+  min-height: 0; /* IMPORTANT for scroll areas */
 }
+
 
 /* Chat Body (scrollable) */
 .chatBody {
   flex-grow: 1;
   overflow-y: auto;
+  min-height: 0;
   padding: 8px 16px;
   background-color: #f9f9f9;
 }

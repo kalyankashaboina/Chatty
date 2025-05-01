@@ -153,7 +153,7 @@ const Chat: React.FC<ChatProps> = ({ selectedUser, messages, setMessages, setSel
   }
 
   return (
-    <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column", height: "100vh" }}>
+    <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column", height: "100dvh" }}>
       {/* Chat Header */}
       <ChatHeader selectedUser={selectedUser} setSelectedUser={setSelectedUser} handleCall={handleCall} />
 
@@ -162,6 +162,7 @@ const Chat: React.FC<ChatProps> = ({ selectedUser, messages, setMessages, setSel
         sx={{
           flexGrow: 1,
           overflowY: "auto",
+          minHeight: 0,
           padding: "8px 16px",
           backgroundColor: "#f9f9f9",
         }}
