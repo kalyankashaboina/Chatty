@@ -14,30 +14,23 @@ interface ChatBodyProps {
 const ChatBody: React.FC<ChatBodyProps> = ({ filteredMessages, myUserId }) => {
   const [typingUser, setTypingUser] = useState<User | null>(null);
   const chatEndRef = useRef<HTMLDivElement | null>(null);
+  const initialScrollDone = useRef(false); // 👈 New ref to track first scroll
 
   useEffect(() => {
     const socket = getSocket();
     if (!socket) return;
 
     socket.on("typing", (senderId: User) => {
-      //   console.log(`🟢 Typing event from: ${JSON.stringify(senderId)}, I'm: ${JSON.stringify(myUserId)}`);
-      // reciver and sender are different users
       if (senderId.senderId !== myUserId) {
         setTypingUser(senderId);
       }
     });
 
     socket.on("stoppedTyping", (senderId: User) => {
-
-      //typing user and senderId are same
       if (typingUser?.senderId === senderId.senderId) {
-        console.log(`✅ Clearing typing indicator for: ${JSON.stringify(senderId)}`);
         setTypingUser(null);
-      } else {
-        console.log(`⏭️ No match. Typing indicator remains for: ${JSON.stringify(typingUser)}`);
       }
     });
-
 
     return () => {
       socket.off("typing");
@@ -47,7 +40,10 @@ const ChatBody: React.FC<ChatBodyProps> = ({ filteredMessages, myUserId }) => {
 
   useEffect(() => {
     if (chatEndRef.current) {
-      chatEndRef.current.scrollIntoView({ behavior: "smooth" });
+      chatEndRef.current.scrollIntoView({
+        behavior: initialScrollDone.current ? "smooth" : "auto",
+      });
+      initialScrollDone.current = true;
     }
   }, [filteredMessages]);
 
@@ -57,7 +53,6 @@ const ChatBody: React.FC<ChatBodyProps> = ({ filteredMessages, myUserId }) => {
     <Box sx={{ flexGrow: 1, p: 2, overflowY: "auto" }}>
       {filteredMessages.map((msg) => {
         const isMeMessage = isMe(msg.sender);
-
         return (
           <Box
             key={msg.id}
