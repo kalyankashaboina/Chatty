@@ -45,7 +45,7 @@ const ChatBody: React.FC<ChatBodyProps> = ({ filteredMessages, myUserId }) => {
       });
       initialScrollDone.current = true;
     }
-  }, [filteredMessages]);
+  }, []);
 
   const isMe = (userId: string) => userId === myUserId;
 

@@ -9,14 +9,23 @@ interface UseInfiniteScrollProps {
   throttleMs?: number;
 }
 
-// ✅ Simple throttle helper
+// Throttle helper — returns a throttled function that uses a ref internally to track timing
 const throttle = (func: () => void, limit: number) => {
-  let inThrottle: boolean;
+  let lastFunc: number;
+  let lastRan: number;
   return () => {
-    if (!inThrottle) {
+    const now = Date.now();
+    if (!lastRan) {
       func();
-      inThrottle = true;
-      setTimeout(() => (inThrottle = false), limit);
+      lastRan = now;
+    } else {
+      clearTimeout(lastFunc);
+      lastFunc = window.setTimeout(function () {
+        if (now - lastRan >= limit) {
+          func();
+          lastRan = now;
+        }
+      }, limit - (now - lastRan));
     }
   };
 };
@@ -24,10 +33,10 @@ const throttle = (func: () => void, limit: number) => {
 const useInfiniteScroll = ({
   containerRef,
   isWindow = false,
-  threshold = 100,
+  threshold = 1,
   onTopReach,
   onBottomReach,
-  throttleMs = 500, // Default throttle time
+  throttleMs = 100, // changed default to 100ms for better throttling
 }: UseInfiniteScrollProps) => {
   const [isAtTop, setIsAtTop] = useState(false);
   const [isAtBottom, setIsAtBottom] = useState(false);
@@ -50,6 +59,20 @@ const useInfiniteScroll = ({
 
         if (nearTop && onTopReach) onTopReach();
         if (nearBottom && onBottomReach) onBottomReach();
+      } else if (container === window) {
+        // Window scroll values
+        const scrollTop = window.scrollY || document.documentElement.scrollTop;
+        const scrollHeight = document.documentElement.scrollHeight;
+        const clientHeight = window.innerHeight;
+
+        const nearTop = scrollTop <= threshold;
+        const nearBottom = scrollTop + clientHeight >= scrollHeight - threshold;
+
+        setIsAtTop(nearTop);
+        setIsAtBottom(nearBottom);
+
+        if (nearTop && onTopReach) onTopReach();
+        if (nearBottom && onBottomReach) onBottomReach();
       }
     };
 
@@ -60,6 +83,9 @@ const useInfiniteScroll = ({
     } else if (containerRef.current) {
       containerRef.current.addEventListener("scroll", throttledScrollHandler);
     }
+
+    // Initial check on mount
+    throttledScrollHandler();
 
     return () => {
       if (isWindow) {
