@@ -10,4 +10,17 @@
   .inputField {
     width: 100%;
   }
-  
+  .inputField :global(.MuiOutlinedInput-root fieldset) {
+  border-color: #ccc;
+}
+
+/* Border color on hover */
+.inputField :global(.MuiOutlinedInput-root:hover fieldset) {
+  border-color: #7c3aed; /* a nice violet for hover */
+}
+
+/* Violet border on focus */
+.inputField :global(.MuiOutlinedInput-root.Mui-focused fieldset) {
+  border-color: #7c3aed !important; /* violet border */
+  box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.3); /* subtle violet glow */
+}
