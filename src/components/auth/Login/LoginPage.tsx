@@ -15,36 +15,29 @@ const Login: React.FC<LoginProps> = ({ onSuccess }) => {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
-    const handleLogin = async () => {
-        setLoading(true);
-        try {
-            const data = await loginUser(email, password); 
-            const token = data.token;
-            if (token) {
-                localStorage.setItem("token", token);
-                localStorage.setItem("user", JSON.stringify(data.user));
+   const handleLogin = async () => {
+  setLoading(true);
+  try {
+    const data = await loginUser(email, password); 
 
-                // 🔌 Initialize and connect the socket
-                const socket = initializeSocket();
-                socket.connect();
-                socket.on("connect", () => {
-                    console.log("✅ Socket connected after login:", socket.id);
-                });
-                // Initialize WebSocket or other actions upon login success
-                onSuccess();
 
-                navigate("/home");
-                console.log("Login successful:", data.user);
-            } else {
-                alert("Login failed. Token not received.");
-            }
-        } catch (error) {
-            console.error("Login failed:", error);
-            alert("Login failed. Please check your credentials.");
-        } finally {
-            setLoading(false);
-        }
-    };
+    const socket = initializeSocket();
+    socket.connect();
+    socket.on("connect", () => {
+      console.log("✅ Socket connected after login:", socket.id);
+    });
+
+    onSuccess();
+    navigate("/home");
+    console.log("Login successful:", data.user);
+
+  } catch (error) {
+    console.error("Login failed:", error);
+    alert("Login failed. Please check your credentials.");
+  } finally {
+    setLoading(false);
+  }
+};
 
     return (
         <>

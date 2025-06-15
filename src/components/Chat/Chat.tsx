@@ -6,6 +6,7 @@ import ChatInput from "./ChatInput/ChatInput";
 import ChatHeader from "./ChatHeader/ChatHeader";
 import { getSocket } from "../../utils/socket";
 import axiosInstance from "../../utils/axios";
+// import VideoCallComponent from "../VideoCall/VideoCallComponent";
 
 interface ChatProps {
   selectedUser: User | null;
@@ -18,8 +19,9 @@ interface ChatProps {
 const Chat: React.FC<ChatProps> = ({ selectedUser, messages, setMessages, setSelectedUser }) => {
   const [newMessage, setNewMessage] = useState("");
   const user = JSON.parse(localStorage.getItem("user") || "{}");
-  const myUserId = user?._id || "";
+  const myUserId = user?.id || "";
   const messageListenerAttached = useRef(false);
+  const [showVideoCall, setShowVideoCall] = useState(false);
 
   // Dialog state
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -125,11 +127,17 @@ const Chat: React.FC<ChatProps> = ({ selectedUser, messages, setMessages, setSel
   };
 
   const handleCall = (type: "audio" | "video") => {
-    setDialogMessage(`The ${type} call feature is currently unavailable. This feature will be available soon!`);
-    setDialogOpen(true);
+    if (type === "video") {
+      setShowVideoCall(true);
+    } else {
+      setDialogMessage(`The ${type} call feature is currently unavailable. This feature will be available soon!`);
+      setDialogOpen(true);
+    }
   };
 
+
   const handleCloseDialog = () => setDialogOpen(false);
+  const handleCloseVideoCall = () => setShowVideoCall(false);
 
   if (!selectedUser) {
     return (
@@ -220,6 +228,11 @@ const Chat: React.FC<ChatProps> = ({ selectedUser, messages, setMessages, setSel
           </Button>
         </DialogActions>
       </Dialog>
+
+
+            {/* Video Call Dialog */}
+            {/* <VideoCallComponent recipientId={selectedUser.id} onClose={handleCloseVideoCall} selectedUser={selectedUser} /> */}
+
     </Box>
   );
 };

@@ -5,22 +5,15 @@ let socket: Socket | null = null;
 const SOCKET_URL = import.meta.env.VITE_API_URL || 'https://chatty-server-uhm7.onrender.com';
 
 export const initializeSocket = (): Socket => {
-  if (socket) return socket;  // Return the existing socket connection
+  if (socket) return socket;
 
-  const token = localStorage.getItem('token');
-  if (!token) {
-
-    console.error("❗ No token found. Cannot initialize socket.");
-
-  }
-
+  // No need to read token from localStorage
+  // JWT will be sent automatically via cookies if `withCredentials: true` is set
 
   socket = io(SOCKET_URL, {
-    transports: ["websocket"],  // Use websocket transport
-    withCredentials: true,
-    query: {
-      token: token || "",
-    },
+    transports: ["websocket"],
+    withCredentials: true, // ✅ Send cookies automatically
+    // query: { token: "..." }  // ❌ Don't send token manually
   });
 
   console.log("🔌 Socket initialized");
@@ -52,7 +45,7 @@ export const getSocket = (): Socket | null => {
 export const disconnectSocket = (): void => {
   if (socket) {
     socket.disconnect();
-    socket = null;  // Clear the socket reference
+    socket = null;
     console.log("❌ Socket manually disconnected");
   }
 };

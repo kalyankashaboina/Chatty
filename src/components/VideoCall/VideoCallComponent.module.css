@@ -1,0 +1,93 @@
+/* VideoCallComponent.module.css */
+
+.videoCallContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+  }
+  
+  .videoCallWrapper {
+    position: relative;
+    width: 80%;
+    max-width: 1000px;
+  }
+  
+  .videoContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .localVideo {
+    width: 45%;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    margin-right: 10px;
+  }
+  
+  .remoteVideo {
+    width: 45%;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+  }
+  
+  .callControls {
+    text-align: center;
+  }
+  
+  .callButton,
+  .acceptCall,
+  .declineCall,
+  .endCall {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 10px;
+    transition: background-color 0.3s ease;
+  }
+  .endCall {
+    background-color: #f44336;
+  }
+  
+  .callButton:hover,
+  .acceptCall:hover,
+  .declineCall:hover
+ {
+    background-color: #45a049;
+  }
+  .endCall:hover {
+    background-color: #e53935;
+  }
+  
+  .declineCall {
+    background-color: #f44336;
+  }
+  
+  .declineCall:hover {
+    background-color: #e53935;
+  }
+  
+  /* VideoCallComponent.module.css */
+
+.incomingCallNotification {
+    background-color: #ffcc00;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    border-radius: 5px;
+  }
+  

@@ -57,6 +57,7 @@ const ChatBody: React.FC<ChatBodyProps> = ({ filteredMessages, myUserId }) => {
     <Box sx={{ flexGrow: 1, p: 2, overflowY: "auto" }}>
       {filteredMessages.map((msg) => {
         const isMeMessage = isMe(msg.sender);
+        console.log(`📩 Rendering message from ${msg.sender} (${isMeMessage ? "me" : "them"}): ${msg.content}`);
 
         return (
           <Box
@@ -66,6 +67,7 @@ const ChatBody: React.FC<ChatBodyProps> = ({ filteredMessages, myUserId }) => {
               display: "flex",
               justifyContent: isMeMessage ? "flex-end" : "flex-start",
             }}
+            
           >
             <Box
               sx={{

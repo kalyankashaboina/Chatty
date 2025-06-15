@@ -17,8 +17,6 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ selectedUser, setSelectedUser, 
     }
   };
 
-
-
   return (
     <Box className={styles.chatHeader}>
       {/* Left Section: Back arrow (mobile only) + Username */}
