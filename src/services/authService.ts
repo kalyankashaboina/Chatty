@@ -5,7 +5,7 @@ import { disconnectSocket } from "../utils/socket";
 export const loginUser = async (email: string, password: string) => {
     try {
         const response = await axiosInstance.post("/api/login", { email, password });
-        return response.data; // The server's response data (e.g., token, user)
+        return response.data; 
     } catch (error: any) {
         throw new Error(error?.response?.data?.message || "Login failed. Please check your credentials.");
     }
@@ -15,7 +15,7 @@ export const loginUser = async (email: string, password: string) => {
 export const registerUser = async (username: string, email: string, password: string) => {
     try {
         const response = await axiosInstance.post("/api/register", { username, email, password });
-        return response.data; // The server's response data (e.g., user details)
+        return response.data; 
     } catch (error: any) {
         throw new Error(error?.response?.data?.message || "Registration failed. Please try again.");
     }
@@ -26,7 +26,6 @@ export const logoutUser = async () => {
     try {
         await axiosInstance.post("/api/logout");
         disconnectSocket()
-        localStorage.removeItem("token");
         localStorage.removeItem("user");
 
     } catch (error: any) {

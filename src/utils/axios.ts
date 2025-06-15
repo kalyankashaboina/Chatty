@@ -1,6 +1,7 @@
 import axios from 'axios';
+import { logoutUser } from '../services/authService';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://chatty-server-uhm7.onrender.com';
+const API_BASE_URL ="/api"
 console.log('API_BASE_URL:', API_BASE_URL);
 
 const axiosInstance = axios.create({
@@ -10,10 +11,6 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token'); // Retrieve token from localStorage
-    if (token) {
-      config.headers['Authorization'] = `Bearer ${token}`; // Add token to the header
-    }
     return config;
   },
   (error) => {
@@ -21,14 +18,22 @@ axiosInstance.interceptors.request.use(
   }
 );
 
+
 axiosInstance.interceptors.response.use(
   (response) => response,
-  (error) => {
+  async (error) => {
     if (error.response && error.response.status === 401) {
-      console.error('Session expired. Please log in again.', error);
+      console.error('Session expired. Logging out.', error);
+      try {
+        await logoutUser();
+      } catch (logoutError) {
+        console.error("Logout failed:", logoutError);
+      }
+      window.location.href = '/'; 
     }
     return Promise.reject(error);
   }
 );
+
 
 export default axiosInstance;

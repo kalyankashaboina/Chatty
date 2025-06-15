@@ -1,20 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
-import {
-  Box,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Button,
-  Typography,
-} from "@mui/material";
+import { Box, Dialog, DialogActions, DialogContent, DialogTitle, Button, Typography } from "@mui/material";
 import { ChatMessage, User } from "../../types/types";
 import ChatBody from "./ChatBody/ChatBody";
 import ChatInput from "./ChatInput/ChatInput";
 import ChatHeader from "./ChatHeader/ChatHeader";
 import { getSocket } from "../../utils/socket";
-import { fetchPaginatedMessages } from "../../services/chatServices";
-import useInfiniteScroll from "../../hooks/InfinateScrool";
+import axiosInstance from "../../utils/axios";
 
 interface ChatProps {
   selectedUser: User | null;
@@ -24,89 +15,32 @@ interface ChatProps {
   setSelectedUser?: React.Dispatch<React.SetStateAction<User | null>>;
 }
 
-const Chat: React.FC<ChatProps> = ({
-  selectedUser,
-  messages,
-  setMessages,
-  setSelectedUser,
-}) => {
+const Chat: React.FC<ChatProps> = ({ selectedUser, messages, setMessages, setSelectedUser }) => {
   const [newMessage, setNewMessage] = useState("");
   const user = JSON.parse(localStorage.getItem("user") || "{}");
-  const myUserId = user?._id || "";
+  const myUserId = user?.id || "";
   const messageListenerAttached = useRef(false);
-  const chatContainerRef = useRef<HTMLElement | null>(null);
 
-  const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
-  const [initialScrollDone, setInitialScrollDone] = useState(false);
-  const [isLoadingMore, setIsLoadingMore] = useState(false); // ✅ new
-
+  // Dialog state
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
-
-  // Load older messages
-  const loadOlderMessages = async () => {
-    if (!selectedUser || !hasMore || isLoadingMore) return;
-
-    setIsLoadingMore(true);
-
-    const chatContainer = chatContainerRef.current;
-    if (!chatContainer) return;
-
-    const prevScrollHeight = chatContainer.scrollHeight;
-
-    console.log("⬆️ [PAGINATION] Loading older messages");
-    console.log("📤 [PAGINATION] Sending to API:", {
-      senderId: myUserId,
-      receiverId: selectedUser.id,
-      page: page + 1,
-      limit: 20,
-    });
-
-    try {
-      const data = await fetchPaginatedMessages(myUserId, selectedUser.id, page + 1, 20);
-
-      if (Array.isArray(data.messages) && data.messages.length > 0) {
-        setMessages((prev) => [...data.messages, ...prev]);
-        setPage((prev) => prev + 1);
-        setHasMore(messages.length + data.messages.length < data.total);
-
-        requestAnimationFrame(() => {
-          const newScrollHeight = chatContainer.scrollHeight;
-          const diff = newScrollHeight - prevScrollHeight;
-          chatContainer.scrollTop += diff;
-        });
-      } else {
-        setHasMore(false);
-      }
-    } catch (err) {
-      console.error("❌ [PAGINATION] Failed to fetch older messages:", err);
-    } finally {
-      setIsLoadingMore(false); // ✅ ensure this always resets
-    }
-  };
-
-  useInfiniteScroll({
-    containerRef: chatContainerRef,
-    isWindow: false,
-    threshold: 20,
-    throttleMs: 500,
-    onTopReach: () => {
-      if (!initialScrollDone) return;
-      console.log("⬆️ Top reached — trying to load more messages");
-      loadOlderMessages();
-    },
-    onBottomReach: () => {
-      console.log("🔚 Reached bottom — current view is latest");
-    },
-  });
-
   useEffect(() => {
     const socket = getSocket();
-    if (!socket || messageListenerAttached.current) return;
+
+    if (socket) {
+      console.log("🔌 Socket initialized:", socket.id);
+    } else {
+      console.log("❌ No socket connection available.");
+      return;
+    }
+
+    // ✅ Only attach the message listener once
+    if (messageListenerAttached.current) return;
 
     socket.on("message", (message) => {
+      console.log("📥 Received message:", message);
       const isMe = message.senderId === myUserId;
+
       setMessages((prev) => [
         ...prev,
         {
@@ -120,66 +54,114 @@ const Chat: React.FC<ChatProps> = ({
     });
 
     messageListenerAttached.current = true;
-    socket.on("connect", () => console.log("🔌 Socket connected:", socket.id));
-    socket.on("disconnect", () => console.log("❌ Socket disconnected"));
+
+    // ✅ Optional: one-time log for socket connection state
+    if (socket.connected) {
+      console.log("🔌 Socket connected:", socket.id);
+    } else {
+      socket.on("connect", () => console.log("🔌 Socket connected:", socket.id));
+      socket.on("disconnect", () => console.log("❌ Socket disconnected"));
+    }
+
+    // ✅ No need to remove listeners unless on logout
   }, []);
+
 
   useEffect(() => {
     const fetchMessages = async () => {
       if (!selectedUser) return;
-
-      console.log("📤 [INIT] Sending to API:", {
-        senderId: myUserId,
-        receiverId: selectedUser.id,
-        page: 1,
-        limit: 20,
-      });
-
       try {
-        const data = await fetchPaginatedMessages(myUserId, selectedUser.id, 1, 20);
-        console.log("📥 Initial fetch:", data);
-
-        setMessages(data.messages);
-        setPage(1);
-        setHasMore(data.messages.length < data.total);
-
-        // Scroll to bottom after initial load
-        setTimeout(() => {
-          requestAnimationFrame(() => {
-            if (chatContainerRef.current) {
-              chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
-              console.log("🔽 Scrolled to bottom after initial load");
-              setInitialScrollDone(true);
-            }
-          });
-        }, 100);
+        const res = await axiosInstance.get(`/chat/last20?userId=${myUserId}&selectedUserId=${selectedUser.id}`);
+        console.log("Fetched messages:", res.data);
+        if (Array.isArray(res.data)) setMessages(res.data);
       } catch (err) {
         console.error("❌ Failed to fetch messages:", err);
       }
     };
 
-    setInitialScrollDone(false);
     fetchMessages();
   }, [selectedUser?.id]);
 
-  return (
-    <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column", height: "100dvh" }}>
-      <ChatHeader
-        selectedUser={selectedUser}
-        setSelectedUser={setSelectedUser}
-        handleCall={() => {
-          setDialogOpen(true);
-          setDialogMessage("Call feature is not available yet");
-        }}
-      />
+  const handleSendMessage = () => {
+    const socket = getSocket();
+    if (!newMessage.trim() || !selectedUser || !socket) return;
 
+    const messagePayload = {
+      recipientId: selectedUser.id,
+      content: newMessage,
+      type: "text",
+    };
+
+    setMessages((prev) => [
+      ...prev,
+      {
+        id: Date.now().toString(),
+        content: newMessage,
+        type: "text",
+        sender: myUserId,
+        receiver: selectedUser.id,
+      },
+    ]);
+
+    socket.emit("sendMessage", messagePayload);
+    setNewMessage("");
+    console.log("📤 Sent message:", messagePayload);
+  };
+
+  const handleTyping = () => {
+    const socket = getSocket();
+    if (socket && selectedUser) {
+      console.log("Emitting 'typing' event for user:", selectedUser.id);
+      socket.emit("typing", { recipientId: selectedUser.id });
+    }
+  };
+
+  const handleStoppedTyping = () => {
+    const socket = getSocket();
+    if (socket && selectedUser) {
+      console.log("Emitting 'stoppedTyping' event for user:", selectedUser.id);
+      socket.emit("stoppedTyping", { recipientId: selectedUser.id });
+    }
+  };
+
+  const handleCall = (type: "audio" | "video") => {
+    setDialogMessage(`The ${type} call feature is currently unavailable. This feature will be available soon!`);
+    setDialogOpen(true);
+  };
+
+  const handleCloseDialog = () => setDialogOpen(false);
+
+  if (!selectedUser) {
+    return (
       <Box
-        ref={chatContainerRef}
-        className="chat-body"
+        sx={{
+          flexGrow: 1,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          flexDirection: "column",
+          color: "#888",
+          textAlign: "center",
+        }}
+      >
+        <Typography variant="h5" gutterBottom>
+          👋 Welcome!
+        </Typography>
+        <Typography>Select a user from the left to start chatting 💬</Typography>
+      </Box>
+    );
+  }
+
+  return (
+    <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column", height: "100vh" }}>
+      {/* Chat Header */}
+      <ChatHeader selectedUser={selectedUser} setSelectedUser={setSelectedUser} handleCall={handleCall} />
+
+      {/* Chat Body */}
+      <Box
         sx={{
           flexGrow: 1,
           overflowY: "auto",
-          minHeight: 0,
           padding: "8px 16px",
           backgroundColor: "#f9f9f9",
         }}
@@ -187,42 +169,44 @@ const Chat: React.FC<ChatProps> = ({
         <ChatBody filteredMessages={messages} myUserId={myUserId} />
       </Box>
 
-      <Box
-        sx={{
-          padding: "8px 16px",
-          borderTop: "1px solid #ddd",
-          backgroundColor: "#fff",
-          flexShrink: 0,
-        }}
-      >
+      {/* Chat Input */}
+      <Box sx={{ padding: "8px 16px", borderTop: "1px solid #ddd", backgroundColor: "#fff", flexShrink: 0 }}>
         <ChatInput
           newMessage={newMessage}
           setNewMessage={setNewMessage}
-          selectedUserId={selectedUser?.id || ""}
-          handleSendMessage={() => {
-            /* your send message code here */
-          }}
-          handleTyping={() => {
-            /* your typing handler */
-          }}
-          handleStoppedTyping={() => {
-            /* your stopped typing handler */
-          }}
+          selectedUserId={selectedUser.id}
+          handleSendMessage={handleSendMessage}
+          handleTyping={handleTyping}
+          handleStoppedTyping={handleStoppedTyping}
         />
       </Box>
 
-      <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
-        <DialogTitle sx={{ backgroundColor: "#8a2be2", color: "#fff", textAlign: "center", fontWeight: "bold" }}>
+      {/* Dialog for unavailable features */}
+      <Dialog open={dialogOpen} onClose={handleCloseDialog}>
+        <DialogTitle
+          sx={{
+            backgroundColor: "#8a2be2",
+            color: "#fff",
+            textAlign: "center",
+            fontWeight: "bold",
+          }}
+        >
           Feature Not Available
         </DialogTitle>
-        <DialogContent sx={{ backgroundColor: "#f3f4f6", padding: "20px", textAlign: "center" }}>
+        <DialogContent
+          sx={{
+            backgroundColor: "#f3f4f6",
+            padding: "20px",
+            textAlign: "center",
+          }}
+        >
           <Typography variant="body1" sx={{ fontSize: "16px", color: "#333" }}>
             {dialogMessage}
           </Typography>
         </DialogContent>
         <DialogActions sx={{ justifyContent: "center", paddingBottom: "20px" }}>
           <Button
-            onClick={() => setDialogOpen(false)}
+            onClick={handleCloseDialog}
             color="primary"
             sx={{
               backgroundColor: "#8a2be2",
