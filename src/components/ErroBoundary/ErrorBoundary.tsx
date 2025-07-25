@@ -26,7 +26,11 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
   render() {
     if (this.state.hasError) {
-      return <div style={{ color: 'red', padding: '20px', fontSize: '18px' }}>Something went wrong: {this.state.errorMessage}</div>;
+      return (
+        <div style={{ color: 'red', padding: '20px', fontSize: '18px' }}>
+          Something went wrong: {this.state.errorMessage}
+        </div>
+      );
     }
 
     return this.props.children; // Render the children

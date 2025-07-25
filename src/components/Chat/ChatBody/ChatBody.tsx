@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Box, Typography } from "@mui/material";
-import { ChatMessage } from "../../../types/types";
-import { getSocket } from "../../../utils/socket";
-import BubbleTypingIndicator from "../../Animations/BubbleTypingIndicator/BubbleTypingIndicator";
+import React, { useEffect, useRef, useState } from 'react';
+import { Box, Typography } from '@mui/material';
+import { ChatMessage } from '../../../types/types';
+import { getSocket } from '../../../utils/socket';
+import BubbleTypingIndicator from '../../Animations/BubbleTypingIndicator/BubbleTypingIndicator';
 interface User {
   senderId: string;
 }
@@ -20,28 +20,28 @@ const ChatBody: React.FC<ChatBodyProps> = ({ filteredMessages, myUserId }) => {
     const socket = getSocket();
     if (!socket) return;
 
-    socket.on("typing", (senderId: User) => {
+    socket.on('typing', (senderId: User) => {
       if (senderId.senderId !== myUserId) {
         setTypingUser(senderId);
       }
     });
 
-    socket.on("stoppedTyping", (senderId: User) => {
+    socket.on('stoppedTyping', (senderId: User) => {
       if (typingUser?.senderId === senderId.senderId) {
         setTypingUser(null);
       }
     });
 
     return () => {
-      socket.off("typing");
-      socket.off("stoppedTyping");
+      socket.off('typing');
+      socket.off('stoppedTyping');
     };
   }, [myUserId, typingUser]);
 
   useEffect(() => {
     if (chatEndRef.current) {
       chatEndRef.current.scrollIntoView({
-        behavior: initialScrollDone.current ? "smooth" : "auto",
+        behavior: initialScrollDone.current ? 'smooth' : 'auto',
       });
       initialScrollDone.current = true;
     }
@@ -50,44 +50,42 @@ const ChatBody: React.FC<ChatBodyProps> = ({ filteredMessages, myUserId }) => {
   const isMe = (userId: string) => userId === myUserId;
 
   return (
-    <Box sx={{ flexGrow: 1, p: 2, overflowY: "auto" }}>
-      {filteredMessages.map((msg) => {
+    <Box sx={{ flexGrow: 1, p: 2, overflowY: 'auto' }}>
+      {filteredMessages.map(msg => {
         const isMeMessage = isMe(msg.sender);
-        console.log(`Rendering message from ${msg.sender} (${isMeMessage ? "me" : "them"}):`, msg);
+        console.log(`Rendering message from ${msg.sender} (${isMeMessage ? 'me' : 'them'}):`, msg);
         return (
           <Box
             key={msg.id}
             sx={{
               mb: 1,
-              display: "flex",
-              justifyContent: isMeMessage ? "flex-end" : "flex-start",
+              display: 'flex',
+              justifyContent: isMeMessage ? 'flex-end' : 'flex-start',
             }}
           >
             <Box
               sx={{
-                maxWidth: "70%",
+                maxWidth: '70%',
                 p: 1.5,
                 borderRadius: 2,
-                backgroundColor: isMeMessage ? "#B794F4" : "#63b3ed",
+                backgroundColor: isMeMessage ? '#B794F4' : '#63b3ed',
                 boxShadow: 1,
               }}
             >
-              {msg.type === "text" && (
-                <Typography variant="body1">{msg.content}</Typography>
-              )}
-              {msg.type === "image" && (
+              {msg.type === 'text' && <Typography variant="body1">{msg.content}</Typography>}
+              {msg.type === 'image' && (
                 <img
                   src={msg.content}
                   alt="Image"
-                  style={{ maxWidth: "100%", borderRadius: "8px" }}
+                  style={{ maxWidth: '100%', borderRadius: '8px' }}
                 />
               )}
-              {msg.type === "video" && (
+              {msg.type === 'video' && (
                 <video controls width="100%">
                   <source src={msg.content} type="video/mp4" />
                 </video>
               )}
-              {msg.type === "audio" && (
+              {msg.type === 'audio' && (
                 <audio controls>
                   <source src={msg.content} type="audio/mpeg" />
                 </audio>
@@ -99,7 +97,7 @@ const ChatBody: React.FC<ChatBodyProps> = ({ filteredMessages, myUserId }) => {
 
       {/* Typing Indicator */}
       {typingUser && typingUser.senderId !== myUserId && (
-        <Box sx={{ mt: 2, display: "flex", justifyContent: "flex-start" }}>
+        <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-start' }}>
           <BubbleTypingIndicator />
         </Box>
       )}

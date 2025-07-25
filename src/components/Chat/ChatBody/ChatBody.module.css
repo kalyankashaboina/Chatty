@@ -1,32 +1,31 @@
 .messagesArea {
-    flex: 1;
-    padding: 16px;
-    overflow: auto;
-    display: flex;
-    flex-direction: column;
-    background-color: #fafafa;
-  }
-  
-  .messageBox {
-    margin-bottom: 8px;
-    display: flex;
-    justify-content: flex-start;  /* Default to left-aligned */
-  }
-  
-  .sentMessage {
-    align-self: flex-end;  /* Right alignment for "me" */
-    justify-content: flex-end;
-  }
-  
-  .receivedMessage {
-    align-self: flex-start; /* Left alignment for received messages */
-  }
-  
-  .paper {
-    padding: 10px;
-    border-radius: 8px;
-    max-width: 60%;
-    word-wrap: break-word;
-    white-space: pre-line;
-  }
-  
+  flex: 1;
+  padding: 16px;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  background-color: #fafafa;
+}
+
+.messageBox {
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: flex-start; /* Default to left-aligned */
+}
+
+.sentMessage {
+  align-self: flex-end; /* Right alignment for "me" */
+  justify-content: flex-end;
+}
+
+.receivedMessage {
+  align-self: flex-start; /* Left alignment for received messages */
+}
+
+.paper {
+  padding: 10px;
+  border-radius: 8px;
+  max-width: 60%;
+  word-wrap: break-word;
+  white-space: pre-line;
+}

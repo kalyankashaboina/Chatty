@@ -1,4 +1,4 @@
-import { useEffect, useState, RefObject } from "react";
+import { useEffect, useState, RefObject } from 'react';
 
 interface UseInfiniteScrollProps {
   containerRef: RefObject<HTMLElement | null>;
@@ -20,12 +20,15 @@ const throttle = (func: () => void, limit: number) => {
       lastRan = now;
     } else {
       clearTimeout(lastFunc);
-      lastFunc = window.setTimeout(function () {
-        if (now - lastRan >= limit) {
-          func();
-          lastRan = now;
-        }
-      }, limit - (now - lastRan));
+      lastFunc = window.setTimeout(
+        function () {
+          if (now - lastRan >= limit) {
+            func();
+            lastRan = now;
+          }
+        },
+        limit - (now - lastRan)
+      );
     }
   };
 };
@@ -79,9 +82,9 @@ const useInfiniteScroll = ({
     const throttledScrollHandler = throttle(scrollHandler, throttleMs);
 
     if (isWindow) {
-      window.addEventListener("scroll", throttledScrollHandler);
+      window.addEventListener('scroll', throttledScrollHandler);
     } else if (containerRef.current) {
-      containerRef.current.addEventListener("scroll", throttledScrollHandler);
+      containerRef.current.addEventListener('scroll', throttledScrollHandler);
     }
 
     // Initial check on mount
@@ -89,9 +92,9 @@ const useInfiniteScroll = ({
 
     return () => {
       if (isWindow) {
-        window.removeEventListener("scroll", throttledScrollHandler);
+        window.removeEventListener('scroll', throttledScrollHandler);
       } else if (containerRef.current) {
-        containerRef.current.removeEventListener("scroll", throttledScrollHandler);
+        containerRef.current.removeEventListener('scroll', throttledScrollHandler);
       }
     };
   }, [containerRef, isWindow, threshold, onTopReach, onBottomReach, throttleMs]);

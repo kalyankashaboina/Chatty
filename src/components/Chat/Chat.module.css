@@ -6,7 +6,6 @@
   min-height: 0; /* IMPORTANT for scroll areas */
 }
 
-
 /* Chat Body (scrollable) */
 .chatBody {
   flex-grow: 1;

@@ -17,7 +17,7 @@
 }
 
 .chattyLogo:hover {
-  color:violet
+  color: violet;
 }
 
 .MuiButton-root,
@@ -49,7 +49,7 @@
 }
 
 .navButtons .MuiButton-root:hover {
-  background-color: violet
+  background-color: violet;
 }
 
 .iconButton {
@@ -58,11 +58,12 @@
 }
 
 .iconButton:hover {
-  background-color:violet
+  background-color: violet;
 }
 
 /* Responsive Design for Mobile */
-@media (max-width: 768px) { /* Replace with actual value of $sm-screen */
+@media (max-width: 768px) {
+  /* Replace with actual value of $sm-screen */
   .desktopNavbar {
     flex-direction: column;
     align-items: center;

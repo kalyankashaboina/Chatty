@@ -1,25 +1,24 @@
 // App.tsx
-import { useEffect, useMemo, useState } from "react";
-import { ThemeProvider, createTheme, CssBaseline } from "@mui/material";
-import { BrowserRouter, Routes, Route, } from "react-router-dom";
-import Navbar from "./components/NavBar/Navbar";
-import Welcome from "./components/welcome/Welcome";
-import AuthDialog from "./components/auth/AuthDialog";
-import HomeScreen from "./components/Homepage/HomeScreen";
-import ErrorBoundary from "./components/ErroBoundary/ErrorBoundary";
+import { useEffect, useMemo, useState } from 'react';
+import { ThemeProvider, createTheme, CssBaseline } from '@mui/material';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Navbar from './components/NavBar/Navbar';
+import Welcome from './components/welcome/Welcome';
+import AuthDialog from './components/auth/AuthDialog';
+import HomeScreen from './components/Homepage/HomeScreen';
+import ErrorBoundary from './components/ErroBoundary/ErrorBoundary';
 
 const App = () => {
-  const [themeMode, setThemeMode] = useState<"light" | "dark">("light");
+  const [themeMode, setThemeMode] = useState<'light' | 'dark'>('light');
   const [isDialogOpen, setDialogOpen] = useState(false);
-  const [defaultTab, setDefaultTab] = useState<"login" | "register">("login");
-
+  const [defaultTab, setDefaultTab] = useState<'login' | 'register'>('login');
 
   useEffect(() => {
-    document.body.setAttribute("data-mui-color-scheme", themeMode);
+    document.body.setAttribute('data-mui-color-scheme', themeMode);
   }, [themeMode]);
 
   const toggleTheme = () => {
-    setThemeMode((prev) => (prev === "light" ? "dark" : "light"));
+    setThemeMode(prev => (prev === 'light' ? 'dark' : 'light'));
   };
 
   const theme = useMemo(
@@ -28,21 +27,21 @@ const App = () => {
         palette: {
           mode: themeMode,
           primary: {
-            main: "#7c3aed",
+            main: '#7c3aed',
           },
           background: {
-            default: themeMode === "light" ? "#ffffff" : "#09090b",
-            paper: themeMode === "light" ? "#ffffff" : "#1e1e1e",
+            default: themeMode === 'light' ? '#ffffff' : '#09090b',
+            paper: themeMode === 'light' ? '#ffffff' : '#1e1e1e',
           },
           text: {
-            primary: themeMode === "light" ? "#09090b" : "#ffffff",
+            primary: themeMode === 'light' ? '#09090b' : '#ffffff',
           },
         },
       }),
     [themeMode]
   );
 
-  const handleOpenDialog = (tab: "login" | "register") => {
+  const handleOpenDialog = (tab: 'login' | 'register') => {
     setDefaultTab(tab);
     setDialogOpen(true);
   };
@@ -61,8 +60,8 @@ const App = () => {
                 <>
                   <Navbar onToggleTheme={toggleTheme} themeMode={themeMode} />
                   <Welcome
-                    onLogin={() => handleOpenDialog("login")}
-                    onRegister={() => handleOpenDialog("register")}
+                    onLogin={() => handleOpenDialog('login')}
+                    onRegister={() => handleOpenDialog('register')}
                   />
                   {isDialogOpen && (
                     <AuthDialog

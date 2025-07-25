@@ -5,14 +5,14 @@
   --color-white: #ffffff;
 }
 
-[data-mui-color-scheme="light"] {
+[data-mui-color-scheme='light'] {
   --bg-color: var(--color-white);
   --text-color: var(--color-black);
   --button-bg: var(--color-violet);
   --button-text: var(--color-white);
 }
 
-[data-mui-color-scheme="dark"] {
+[data-mui-color-scheme='dark'] {
   --bg-color: var(--color-black);
   --text-color: var(--color-white);
   --button-bg: var(--color-violet-light);
@@ -32,7 +32,9 @@ body,
 body {
   background-color: var(--bg-color);
   color: var(--text-color);
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 button {

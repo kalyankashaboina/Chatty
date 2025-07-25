@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { Box, TextField, Button } from "@mui/material";
-import styles from "./ChatInput.module.css";
+import React, { useState } from 'react';
+import { Box, TextField, Button } from '@mui/material';
+import styles from './ChatInput.module.css';
 
 interface ChatInputProps {
   newMessage: string;
@@ -25,7 +25,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
     setNewMessage(inputValue);
 
     // Log typing change
-    console.log("Input changed:", inputValue);
+    console.log('Input changed:', inputValue);
 
     // Emit typing event when the user starts typing
     console.log("Emitting 'typing' event...");
@@ -46,8 +46,8 @@ const ChatInput: React.FC<ChatInputProps> = ({
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") {
-      console.log("Sending message:", newMessage);
+    if (e.key === 'Enter') {
+      console.log('Sending message:', newMessage);
       handleSendMessage();
     }
   };

@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react";
-import { Box, CircularProgress } from "@mui/material";
-import styles from "./HomeScreen.module.css";
-import Sidebar from "../Sidebar/Sidebar";
-import Chat from "../Chat/Chat";
-import { User, ChatMessage } from "../../types/types";
-import { initializeSocket } from "../../utils/socket";
-import axiosInstance from "../../utils/axios";
-import useSocketEvents from "../../hooks/useSocketEvents";
+import { useEffect, useState } from 'react';
+import { Box, CircularProgress } from '@mui/material';
+import styles from './HomeScreen.module.css';
+import Sidebar from '../Sidebar/Sidebar';
+import Chat from '../Chat/Chat';
+import { User, ChatMessage } from '../../types/types';
+import { initializeSocket } from '../../utils/socket';
+import axiosInstance from '../../utils/axios';
+import useSocketEvents from '../../hooks/useSocketEvents';
 
 type RawUser = {
   _id: string;
@@ -25,13 +25,13 @@ const HomeScreen: React.FC = () => {
   // ✅ Resize listener for mobile
   useEffect(() => {
     const handleResize = () => setIsMobileView(window.innerWidth <= 500);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   // ✅ Initialize socket on token presence
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem('token');
     if (token) initializeSocket();
   }, []);
 
@@ -39,18 +39,16 @@ const HomeScreen: React.FC = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axiosInstance.get("/api/sidebar");
+        const response = await axiosInstance.get('/api/sidebar');
         const mappedUsers: User[] = response.data.users.map((user: RawUser) => ({
           id: user._id,
           username: user.username,
-
         }));
         setUsers(mappedUsers);
       } catch (error) {
-        console.error("Error fetching users:", error);
+        console.error('Error fetching users:', error);
       } finally {
         setLoading(false);
-
       }
     };
 
@@ -62,7 +60,9 @@ const HomeScreen: React.FC = () => {
 
   if (loading) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100dvh' }}>
+      <Box
+        sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100dvh' }}
+      >
         <CircularProgress />
       </Box>
     );

@@ -7,14 +7,14 @@ export interface User {
 }
 
 // ✅ Enum to clearly define allowed message types
-export type MessageType = "text" | "image" | "video" | "audio";
+export type MessageType = 'text' | 'image' | 'video' | 'audio';
 
 // ✅ ChatMessage type, updated for media support
 export interface ChatMessage {
   id: string;
   sender: string;
   receiver: string;
-  content: string;         // ⬅️ renamed from `text` to `content`
-  type: MessageType;       
-  timestamp?: Date | string; 
+  content: string; // ⬅️ renamed from `text` to `content`
+  type: MessageType;
+  timestamp?: Date | string;
 }
