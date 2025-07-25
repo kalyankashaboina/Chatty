@@ -1,4 +1,4 @@
-import React, { useState, } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Paper,
   List,
@@ -30,32 +30,33 @@ const Sidebar: React.FC<SidebarProps> = ({
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
 
-  // Safe filtering with optional chaining
   const filteredUsers = users.filter((user) =>
     user.username?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  // Only one useEffect for updating --vh custom property
+  useEffect(() => {
+    const updateVh = () => {
+      const vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty("--vh", `${vh}px`);
+      console.log(`Updated --vh to ${vh}px (window.innerHeight = ${window.innerHeight})`);
+    };
+
+    updateVh();
+    window.addEventListener("resize", updateVh);
+    return () => window.removeEventListener("resize", updateVh);
+  }, []);
+
   const handleLogout = async () => {
     console.log("Logout clicked");
     try {
-      logoutUser()
+      await logoutUser();
       navigate("/");
     } catch (error) {
       console.error("Error during logout:", error);
       alert("Something went wrong while logging out.");
     }
   };
-
-  // useEffect(() => {
-  //   // Logging when a user goes online/offline
-  //   users.forEach((user) => {
-  //     if (user.isOnline) {
-  //       console.log(`${user.username} is now online`);
-  //     } else {
-  //       console.log(`${user.username} is offline`);
-  //     }
-  //   });
-  // }, [users]);
 
   return (
     <Paper elevation={2} className={styles.sidebar}>
@@ -64,12 +65,16 @@ const Sidebar: React.FC<SidebarProps> = ({
         <Typography variant="h6" className={styles.sidebarHeader}>
           Users
         </Typography>
-
-        {/* Logout Button - Only on mobile */}
-        <Button className={styles.logoutButton} variant="contained" onClick={handleLogout}>Logout</Button>
+        <Button
+          className={styles.logoutButton}
+          variant="contained"
+          onClick={handleLogout}
+        >
+          Logout
+        </Button>
       </Box>
 
-      {/* Search box */}
+      {/* Search */}
       <Box className={styles.searchBox}>
         <TextField
           fullWidth
@@ -81,7 +86,6 @@ const Sidebar: React.FC<SidebarProps> = ({
         />
       </Box>
 
-      {/* Add User button */}
       <Button
         fullWidth
         className={styles.addUserBtn}
@@ -91,86 +95,68 @@ const Sidebar: React.FC<SidebarProps> = ({
         + Add User
       </Button>
 
-      {/* User list */}
-      <List className={styles.sidebarList}>
-        {filteredUsers.length > 0 ? (
-          filteredUsers.map((user) => (
-            <ListItemButton
-              key={user.id}
-              selected={user.id === selectedUser?.id}
-              onClick={() => setSelectedUser(user)}
-            >
-              <Stack
-                direction="row"
-                spacing={2}
-                alignItems="center"
-                sx={{ width: "100%" }}
-                className={styles.singleUser}
+      {/* Scrollable user list wrapper */}
+      <Box className={styles.sidebarListWrapper}>
+        <List className={styles.sidebarList}>
+          {filteredUsers.length > 0 ? (
+            filteredUsers.map((user) => (
+              <ListItemButton
+                key={user.id}
+                selected={user.id === selectedUser?.id}
+                onClick={() => setSelectedUser(user)}
               >
-                {/* Profile Picture and User Info */}
-                <Box>
-                  <Avatar
-                    src={user.profilePic || undefined} // Use fallback value
-                    alt={user.username}
-                    sx={{
-                      width: 40,
-                      height: 40,
-                      position: "relative",
-                    }}
-                  >
-                    <FiberManualRecord
-                      sx={{
-                        position: "absolute",
-                        bottom: 0,
-                        right: 0,
-                        fontSize: 12,
-                        color: user.isOnline ? "#44b700" : "gray", // Green if online
-                        backgroundColor: "#fff",
-                        borderRadius: "50%",
-                        border: "2px solid white",
-                      }}
-                    />
-                  </Avatar>
-                </Box>
-
-                {/* User details */}
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    flex: 1,
-                  }}
+                <Stack
+                  direction="row"
+                  spacing={2}
+                  alignItems="center"
+                  sx={{ width: "100%" }}
+                  className={styles.singleUser}
                 >
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <Typography sx={{ whiteSpace: "nowrap" }}>
-                      {user.username}
-                    </Typography>
-                    <Typography className={styles.time}>Today</Typography>
+                  <Box>
+                    <Avatar
+                      src={user.profilePic || undefined}
+                      alt={user.username}
+                      sx={{ width: 40, height: 40, position: "relative" }}
+                    >
+                      <FiberManualRecord
+                        sx={{
+                          position: "absolute",
+                          bottom: 0,
+                          right: 0,
+                          fontSize: 12,
+                          color: user.isOnline ? "#44b700" : "gray",
+                          backgroundColor: "#fff",
+                          borderRadius: "50%",
+                          border: "2px solid white",
+                        }}
+                      />
+                    </Avatar>
                   </Box>
-
-                  <Box className={styles.userMessageDetails}>
-                    <Typography className={styles.lastMessage}>
-                      Last message here
-                    </Typography>
+                  <Box sx={{ display: "flex", flexDirection: "column", flex: 1 }}>
+                    <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                      <Typography sx={{ whiteSpace: "nowrap" }}>
+                        {user.username}
+                      </Typography>
+                      <Typography className={styles.time}>Today</Typography>
+                    </Box>
+                    <Box className={styles.userMessageDetails}>
+                      <Typography className={styles.lastMessage}>
+                        Last message here
+                      </Typography>
+                    </Box>
                   </Box>
-                </Box>
-              </Stack>
-            </ListItemButton>
-          ))
-        ) : (
-          <Box p={2}>
-            <Typography variant="body2" color="textSecondary">
-              No users found
-            </Typography>
-          </Box>
-        )}
-      </List>
+                </Stack>
+              </ListItemButton>
+            ))
+          ) : (
+            <Box p={2}>
+              <Typography variant="body2" color="textSecondary">
+                No users found
+              </Typography>
+            </Box>
+          )}
+        </List>
+      </Box>
     </Paper>
   );
 };

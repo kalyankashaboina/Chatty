@@ -27,6 +27,7 @@ export const logoutUser = async () => {
         await axiosInstance.post("/api/logout");
         disconnectSocket()
         localStorage.removeItem("user");
+        localStorage.removeItem("token");
 
     } catch (error: any) {
         throw new Error(error?.response?.data?.message || "Logout failed. Please try again.");

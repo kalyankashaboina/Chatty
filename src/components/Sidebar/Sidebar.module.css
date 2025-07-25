@@ -1,100 +1,102 @@
-/* Sidebar container */
 .sidebar {
+  display: flex;
+  flex-direction: column;
   width: 280px;
-  display: flex;
-  flex-direction: column;
-  border-right: 1px solid #ccc;
   max-height: 100vh;
-  background-color: #ffffff; 
-  height: 100dvh; /* Ensure sidebar takes full height */
-  display: flex;
-  flex-direction: column;
+  height: calc(var(--vh, 1vh) * 100);
+  background-color: #ffffff;
+  border-right: 1px solid #ccc;
+  overflow: hidden; /* prevent layout overflow */
 }
 
-/* Sidebar header styling */
+/* Container for header + logout */
+.sidebarHeaderContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background-color: #805ad5;
+  color: #ffffff;
+  flex-shrink: 0;
+  height: 64px;
+}
+
 .sidebarHeader {
-  background-color: #805ad5; /* Violet background */
-  color: #ffffff; /* White text */
-  padding: 16px;
+  color: #ffffff;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  border-bottom: 1px solid #ddd;
-  flex-shrink: 0;
 }
 
-/* Search box styling */
+/* Search box */
 .searchBox {
   padding: 12px 16px;
   background-color: #f0f0f0;
   border-bottom: 1px solid #ddd;
-  flex-shrink: 0; /* Prevent search box from shrinking */
-}
-
-/* Add User button styling */
-.addUserBtn {
-  background-color: #805ad5; /* Violet background */
-  color: #ffffff; /* White text */
-  font-weight: 500;
-  text-transform: none;
-  border-radius: 4px;
-  margin-top: 10px;
   flex-shrink: 0;
 }
 
-/* Sidebar List Styling */
-.sidebarList {
-  flex: 1;
-  overflow-y: auto;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  padding-bottom: 20px; /* Ensure space for logout button */
-  display: flex;
-  flex-direction: column;
+.addUserBtn {
+  background-color: #805ad5;
+  color: #ffffff;
+  font-weight: 500;
+  text-transform: none;
+  border-radius: 4px;
+  margin: 10px 16px 0;
+  flex-shrink: 0;
 }
 
-/* Styling for each user list item */
+/* Wrapper for scrollable list */
+.sidebarListWrapper {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 100px; /* Reserve space so last users aren't blocked */
+  -webkit-overflow-scrolling: touch;
+}
+
+/* SCROLLABLE user list */
+.sidebarList {
+  list-style: none;
+  padding: 0 16px 16px 16px;
+  margin: 0;
+}
+
+/* User list items */
 .sidebarList .MuiListItemButton-root {
   padding: 12px 16px;
-  background-color: #edf2f7; /* Light background for each user */
+  background-color: #edf2f7;
   border-radius: 6px;
-  margin-bottom: 8px; /* Space between items */
-  color: #000000; /* Black text for list items */
+  margin-bottom: 8px;
+  color: #000000;
   display: flex;
   align-items: center;
   transition: background-color 0.3s ease;
-  min-height: 50px; /* Set a minimum height to ensure consistent alignment */
+  min-height: 50px;
 }
 
-/* Hover effect for user list item */
 .sidebarList .MuiListItemButton-root:hover {
-  background-color: #dfe8f3; /* Light hover effect */
+  background-color: #dfe8f3;
 }
 
-/* Selected user styling */
 .sidebarList .MuiListItemButton-root.Mui-selected {
-  background-color: #805ad5; /* Violet background for selected */
-  color: #ffffff; /* White text for selected */
+  background-color: #805ad5;
+  color: #ffffff;
 }
 
-/* Avatar inside user item */
 .sidebarList .MuiListItemButton-root .MuiAvatar-root {
   width: 40px;
   height: 40px;
-  margin-right: 16px; /* Space between avatar and text */
+  margin-right: 16px;
 }
 
-/* User info text */
 .sidebarList .MuiListItemButton-root .MuiTypography-root {
   font-size: 14px;
   font-weight: 500;
   display: flex;
-  align-items: center; /* Align text vertically in the center */
-  flex: 1; /* Ensure the typography takes up remaining space */
+  align-items: center;
+  flex: 1;
 }
 
-/* Styling for the last message and timestamp */
 .userMessageDetails {
   display: flex;
   justify-content: space-between;
@@ -111,61 +113,66 @@
   color: #6c757d;
 }
 
-/* Online status dot */
-.sidebarList .MuiListItemButton-root .MuiAvatar-root .MuiSvgIcon-root {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  font-size: 12px;
-  color: #44b700; /* Green for online */
-  background-color: #fff;
-  border-radius: 50%;
-  border: 2px solid white;
-}
-
-/* User list style */
 .singleUser {
-  background-color: #EDF2F7;
+  background-color: #edf2f7;
   padding: 7px 10px;
   border-radius: 10px;
 }
 
-/* Hide logout button by default (for large screens) */
+/* Hide logout button on desktop */
 .logoutButton {
   display: none !important;
 }
 
+/* Responsive adjustments */
 @media (max-width: 456px) {
   .sidebar {
-    width: 100%; /* Full width on smaller screens */
-    height: 100vh; /* Full viewport height */
-    position: fixed; /* Keep the sidebar fixed on the left */
+    width: 100%;
+    position: fixed;
     top: 0;
     left: 0;
     bottom: 0;
+    height: calc(var(--vh, 1vh) * 100); /* true mobile viewport height */
   }
 
   .logoutButton {
-    display: block !important; /* Show logout button only on mobile */
-    margin-top: auto; /* Ensure the logout button is at the bottom */
+    display: block !important;
+    margin: 16px;
   }
 
-  .sidebar {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
+  .sidebarListWrapper {
+    padding-bottom: 100px; /* ensure enough bottom padding on mobile too */
   }
 
-  .sidebarHeaderContainer {
-    display: flex;
-    width: 100%;
-    justify-content: space-between;
-    background-color: #805ad5;
-    align-items: center;
-  }
-
-  /* Adjust the height of the typography to ensure consistent height for users on mobile */
   .sidebarList .MuiListItemButton-root .MuiTypography-root {
-    height: 50px; /* Set height to ensure consistency */
+    height: 50px;
+    font-size: 13px;
+  }
+
+  .userMessageDetails {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .userMessageDetails .lastMessage,
+  .time {
+    font-size: 11px;
+  }
+
+  .singleUser {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 350px) {
+  .sidebarList .MuiListItemButton-root .MuiAvatar-root {
+    width: 32px;
+    height: 32px;
+  }
+
+  .sidebarList .MuiListItemButton-root .MuiTypography-root {
+    font-size: 12px;
   }
 }

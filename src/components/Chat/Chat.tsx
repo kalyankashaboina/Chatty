@@ -24,20 +24,19 @@ const Chat: React.FC<ChatProps> = ({ selectedUser, messages, setMessages, setSel
   // Dialog state
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
+
   useEffect(() => {
     const socket = getSocket();
-
-    if (socket) {
-      console.log("🔌 Socket initialized:", socket.id);
-    } else {
+    if (!socket) {
       console.log("❌ No socket connection available.");
       return;
     }
 
-    // ✅ Only attach the message listener once
+    console.log("🔌 Socket initialized:", socket.id);
+
     if (messageListenerAttached.current) return;
 
-    socket.on("message", (message) => {
+    const messageHandler = (message: any) => {
       console.log("📥 Received message:", message);
       const isMe = message.senderId === myUserId;
 
@@ -51,11 +50,12 @@ const Chat: React.FC<ChatProps> = ({ selectedUser, messages, setMessages, setSel
           receiver: isMe ? selectedUser?.id || "" : myUserId,
         },
       ]);
-    });
+    };
 
+    socket.on("message", messageHandler);
     messageListenerAttached.current = true;
 
-    // ✅ Optional: one-time log for socket connection state
+    // Socket connection logs
     if (socket.connected) {
       console.log("🔌 Socket connected:", socket.id);
     } else {
@@ -63,9 +63,10 @@ const Chat: React.FC<ChatProps> = ({ selectedUser, messages, setMessages, setSel
       socket.on("disconnect", () => console.log("❌ Socket disconnected"));
     }
 
-    // ✅ No need to remove listeners unless on logout
-  }, []);
-
+    return () => {
+      socket.off("message", messageHandler);
+    };
+  }, [myUserId, selectedUser?.id, setMessages]);
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -80,7 +81,7 @@ const Chat: React.FC<ChatProps> = ({ selectedUser, messages, setMessages, setSel
     };
 
     fetchMessages();
-  }, [selectedUser?.id]);
+  }, [selectedUser?.id, myUserId, setMessages]);
 
   const handleSendMessage = () => {
     const socket = getSocket();

@@ -14,33 +14,34 @@ const Login: React.FC<LoginProps> = ({ onSuccess }) => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+const handleLogin = async () => {
+  setLoading(true);
+  try {
+    const data = await loginUser(email, password);
+    localStorage.setItem("user", JSON.stringify(data.user));
+    localStorage.setItem("token", data.token);
 
-  const handleLogin = async () => {
-    setLoading(true);
-    try {
-      // Login request, backend should set HttpOnly cookie
-      const data = await loginUser(email, password);
-      localStorage.setItem("user", JSON.stringify(data.user)); 
-
-      // Optional: use data.user if needed
-      console.log("Login successful:", data.user);
-
-      // 🔌 Initialize socket (no token from localStorage anymore)
-      const socket = initializeSocket();
-      socket.connect();
-      socket.on("connect", () => {
-        console.log("✅ Socket connected after login:", socket.id);
-      });
-
-      onSuccess();
-      navigate("/home");
-    } catch (error) {
-      console.error("Login failed:", error);
-      alert("Login failed. Please check your credentials.");
-    } finally {
+    const socket = initializeSocket();
+    if (!socket) {
+      alert("Socket initialization failed");
       setLoading(false);
+      return;
     }
-  };
+
+    socket.on("connect", () => {
+      console.log("✅ Socket connected after login:", socket.id);
+    });
+
+    onSuccess();
+    navigate("/home");
+  } catch (error) {
+    console.error("Login failed:", error);
+    alert("Login failed. Please check your credentials.");
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <>
