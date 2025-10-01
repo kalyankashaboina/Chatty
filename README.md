@@ -108,20 +108,18 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 3. **Install dependencies**
 
+   Run the following command to install all required packages:
 
-    Run the following command to install all required packages:
-
-    ```bash
-    npm install
-    ```
+   ```bash
+   npm install
+   ```
 
 4. **Start the development server**
 
+   Launch the development server with:
 
-    Launch the development server with:
+   ```bash
+   npm run dev
+   ```
 
-    ```bash
-    npm run dev
-    ```
-
-    The app will be available at `http://localhost:5173` by default.
+   The app will be available at `http://localhost:5173` by default.
