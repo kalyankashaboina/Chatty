@@ -22,7 +22,6 @@ export default mergeConfig(
             react: ['react', 'react-dom'],
             mui: ['@mui/material', '@mui/icons-material'],
             redux: ['@reduxjs/toolkit', 'react-redux'],
-            chart: ['recharts'],
             auth: ['@react-oauth/google'],
           },
           entryFileNames: 'assets/[name].[hash].js',
