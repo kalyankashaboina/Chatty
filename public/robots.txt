@@ -1,0 +1,6 @@
+# Allow all web crawlers (like Googlebot) to access all parts of your site.
+User-agent: *
+Allow: /
+
+# Provide the full URL to your sitemap.
+Sitemap: https://chatty-navy.vercel.app/sitemap.xml
