@@ -11,13 +11,39 @@ const baseConfig = defineConfig({
       manifest: {
         name: 'Chatty App',
         short_name: 'Chatty',
+        description: 'A modern chat application for seamless communication.',
         start_url: '/',
         display: 'standalone',
-        background_color: '#ffffff',
-        theme_color: '#4f46e5',
+        background_color: '#a78bfa',
+        theme_color: '#7c3aed',
         icons: [
-          { src: '/icons/pwa-192.png', sizes: '192x192', type: 'image/png' },
-          { src: '/icons/pwa-512.png', sizes: '512x512', type: 'image/png' },
+          {
+            src: '/icons/pwa-icon-16.png',
+            sizes: '16x16',
+            type: 'image/png',
+          },
+          {
+            src: '/icons/pwa-icon-32.png',
+            sizes: '32x32',
+            type: 'image/png',
+          },
+          {
+            src: '/icons/pwa-icon-48.png',
+            sizes: '48x48',
+            type: 'image/png',
+          },
+          {
+            src: '/icons/pwa-icon-192.png',
+            sizes: '192x192',
+            type: 'image/png',
+            purpose: 'any',
+          },
+          {
+            src: '/icons/pwa-icon-512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'any maskable',
+          },
         ],
       },
     }),

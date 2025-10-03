@@ -1,5 +1,6 @@
 import { defineConfig, mergeConfig } from 'vite';
 import baseConfig from './vite.config.base';
+import viteCompression from 'vite-plugin-compression';
 
 export default mergeConfig(
   baseConfig,
@@ -7,17 +8,26 @@ export default mergeConfig(
     define: {
       'process.env.NODE_ENV': JSON.stringify('production'),
     },
+    plugins: [
+      viteCompression({
+        algorithm: 'gzip',
+        ext: '.gz',
+      }),
+      viteCompression({
+        algorithm: 'brotliCompress',
+        ext: '.br',
+      }),
+    ],
     build: {
       target: 'es2018',
       cssCodeSplit: true,
       sourcemap: false,
-      minify: 'esbuild',
+      minify: 'terser',
       reportCompressedSize: true,
       chunkSizeWarningLimit: 600,
       outDir: 'dist',
       rollupOptions: {
         output: {
-          // ✅ Better code splitting
           manualChunks: {
             react: ['react', 'react-dom'],
             mui: ['@mui/material', '@mui/icons-material'],
@@ -29,7 +39,6 @@ export default mergeConfig(
           assetFileNames: 'assets/[name].[hash].[ext]',
         },
       },
-      // ✅ Drop console/debug logs in prod
       terserOptions: {
         compress: {
           drop_console: true,
