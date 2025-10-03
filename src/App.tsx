@@ -1,12 +1,16 @@
-// App.tsx
-import { useEffect, useMemo, useState } from 'react';
+// src/App.tsx
+import { useEffect, useMemo, useState, Suspense, lazy } from 'react';
 import { ThemeProvider, createTheme, CssBaseline } from '@mui/material';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Navbar from './components/NavBar/Navbar';
 import Welcome from './components/welcome/Welcome';
 import AuthDialog from './components/auth/AuthDialog';
-import HomeScreen from './components/Homepage/HomeScreen';
 import ErrorBoundary from './components/ErroBoundary/ErrorBoundary';
+
+const Loader = () => <div>Loading...</div>; // Simple loader component
+
+// Lazy-loaded components
+const HomeScreen = lazy(() => import('./components/Homepage/HomeScreen'));
 
 const App = () => {
   const [themeMode, setThemeMode] = useState<'light' | 'dark'>('light');
@@ -54,6 +58,7 @@ const App = () => {
       <ErrorBoundary>
         <BrowserRouter>
           <Routes>
+            {/* Landing page */}
             <Route
               path="/"
               element={
@@ -73,7 +78,16 @@ const App = () => {
                 </>
               }
             />
-            <Route path="/home" element={<HomeScreen />} />
+
+            {/* Home page - lazy loaded */}
+            <Route
+              path="/home"
+              element={
+                <Suspense fallback={<Loader />}>
+                  <HomeScreen />
+                </Suspense>
+              }
+            />
           </Routes>
         </BrowserRouter>
       </ErrorBoundary>

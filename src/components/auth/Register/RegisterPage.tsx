@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { TextField, Button, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { registerUser } from '../../../services/authService'; // Import register service
+import { useAppDispatch } from '@/store/hooks';
+import { setCredentials } from '@/store/slices/authSlice';
+import { useRegisterMutation } from '@/store/slices/api';
 
 interface RegisterProps {
   onSuccess: () => void;
@@ -11,21 +13,28 @@ const Register: React.FC<RegisterProps> = ({ onSuccess }) => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null); // To handle error messages
+
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
+  const [register] = useRegisterMutation();
 
   const handleRegister = async () => {
     setLoading(true);
-    setError(null); // Reset error on every attempt
+    setError(null);
 
     try {
-      await registerUser(username, email, password); // Call the register service
-      alert('Registration successful! You can now log in.');
+      const data = await register({ username, email, password }).unwrap();
+
+      // Save user + token to Redux state
+      dispatch(setCredentials({ user: data.user, token: data.token }));
+
       onSuccess();
-      navigate('/login');
+      navigate('/home'); // Redirect after successful registration
     } catch (err: any) {
-      setError(err.message); // Display error message from the service
+      setError(err?.data?.message || 'Registration failed. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -69,7 +78,7 @@ const Register: React.FC<RegisterProps> = ({ onSuccess }) => {
       <Button
         fullWidth
         variant="contained"
-        sx={{ mt: 2, backgroundColor: '#7c3aed', color: '#ffffff' }}
+        sx={{ mt: 2, backgroundColor: '#7c3aed', color: '#fff' }}
         onClick={handleRegister}
         disabled={loading}
       >

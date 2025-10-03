@@ -1,6 +1,6 @@
-import { useEffect } from 'react';
-import { getSocket } from '../utils/socket';
-import { User, ChatMessage } from '../types/types';
+import { useEffect, useCallback } from 'react';
+import { getSocket } from '@/utils/socket';
+import { User, ChatMessage } from '@/types/types';
 
 interface UseSocketEventsProps {
   selectedUser: User | null;
@@ -9,6 +9,40 @@ interface UseSocketEventsProps {
 }
 
 const useSocketEvents = ({ selectedUser, setUsers, setMessages }: UseSocketEventsProps) => {
+  const handleRecentMessages = useCallback(
+    (messages: ChatMessage[]) => setMessages(messages),
+    [setMessages]
+  );
+
+  const handleNewMessage = useCallback(
+    (message: ChatMessage) => setMessages(prev => [...prev, message]),
+    [setMessages]
+  );
+
+  const handleUserOnline = useCallback(
+    (userId: string) =>
+      setUsers(prev =>
+        prev.some(user => user.id === userId)
+          ? prev.map(user => (user.id === userId ? { ...user, isOnline: true } : user))
+          : prev
+      ),
+    [setUsers]
+  );
+
+  const handleUserOffline = useCallback(
+    (userId: string) =>
+      setUsers(prev =>
+        prev.some(user => user.id === userId)
+          ? prev.map(user => (user.id === userId ? { ...user, isOnline: false } : user))
+          : prev
+      ),
+    [setUsers]
+  );
+
+  const handleTyping = useCallback((username: string) => {
+    console.log(`${username} is typing...`);
+  }, []);
+
   useEffect(() => {
     const socket = getSocket();
     if (!socket) return;
@@ -19,37 +53,29 @@ const useSocketEvents = ({ selectedUser, setUsers, setMessages }: UseSocketEvent
       socket.emit('getRecentMessages', selectedUser.id);
     }
 
-    socket.on('recentMessages', (messages: ChatMessage[]) => {
-      setMessages(messages);
-    });
+    // Register listeners
+    socket.on('recentMessages', handleRecentMessages);
+    socket.on('newMessage', handleNewMessage);
+    socket.on('userOnline', handleUserOnline);
+    socket.on('userOffline', handleUserOffline);
+    socket.on('typing', handleTyping);
 
-    socket.on('newMessage', (message: ChatMessage) => {
-      setMessages(prev => [...prev, message]);
-    });
-
-    socket.on('userOnline', (userId: string) => {
-      setUsers(prev => prev.map(user => (user.id === userId ? { ...user, isOnline: true } : user)));
-    });
-
-    socket.on('userOffline', (userId: string) => {
-      setUsers(prev =>
-        prev.map(user => (user.id === userId ? { ...user, isOnline: false } : user))
-      );
-    });
-
-    socket.on('typing', (username: string) => {
-      console.log(`${username} is typing...`);
-    });
-
-    // Cleanup on unmount
+    // Cleanup
     return () => {
-      socket.off('recentMessages');
-      socket.off('newMessage');
-      socket.off('userOnline');
-      socket.off('userOffline');
-      socket.off('typing');
+      socket.off('recentMessages', handleRecentMessages);
+      socket.off('newMessage', handleNewMessage);
+      socket.off('userOnline', handleUserOnline);
+      socket.off('userOffline', handleUserOffline);
+      socket.off('typing', handleTyping);
     };
-  }, [selectedUser, setMessages, setUsers]);
+  }, [
+    selectedUser,
+    handleRecentMessages,
+    handleNewMessage,
+    handleUserOnline,
+    handleUserOffline,
+    handleTyping,
+  ]);
 };
 
 export default useSocketEvents;

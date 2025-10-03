@@ -1,25 +1,37 @@
+// src/components/Navbar.tsx
+
 import React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
-import { logoutUser } from '../../services/authService';
+import { useDispatch } from 'react-redux';
+import { logout as clearAuthAction } from '../../store/slices/authSlice';
+import { useLogoutMutation } from '@/store/slices/api';
+import { disconnectSocket } from '@/utils/socket';
+
 interface NavbarProps {
   onToggleTheme: () => void;
   themeMode: 'light' | 'dark';
 }
+
 const Navbar: React.FC<NavbarProps> = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  // 4. Initialize the mutation hook. It gives you a trigger function.
+  const [logoutApiCall] = useLogoutMutation();
 
   const handleLogout = async () => {
     try {
-      await logoutUser(); // Call the logout service
-
-      navigate('/'); // Redirect to login after logout
+      await logoutApiCall().unwrap();
+      dispatch(clearAuthAction());
+      disconnectSocket();
+      navigate('/');
     } catch (error: any) {
       console.error('Logout error', error);
-      alert('Logout failed. Please try again.');
+      alert(error.data?.message || 'Logout failed. Please try again.');
     }
   };
 

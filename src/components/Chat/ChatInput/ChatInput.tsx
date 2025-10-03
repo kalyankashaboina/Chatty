@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Box, TextField, Button } from '@mui/material';
 import styles from './ChatInput.module.css';
 
+// 1. ADD 'isSending' TO THE PROPS INTERFACE
 interface ChatInputProps {
   newMessage: string;
   setNewMessage: React.Dispatch<React.SetStateAction<string>>;
@@ -9,6 +10,7 @@ interface ChatInputProps {
   selectedUserId: string;
   handleTyping: () => void;
   handleStoppedTyping: () => void;
+  isSending?: boolean; // Make it optional for safety
 }
 
 const ChatInput: React.FC<ChatInputProps> = ({
@@ -17,6 +19,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
   handleSendMessage,
   handleTyping,
   handleStoppedTyping,
+  isSending, // 2. DESTRUCTURE THE NEW PROP
 }) => {
   const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout | null>(null);
 
@@ -24,30 +27,22 @@ const ChatInput: React.FC<ChatInputProps> = ({
     const inputValue = e.target.value;
     setNewMessage(inputValue);
 
-    // Log typing change
-    console.log('Input changed:', inputValue);
-
-    // Emit typing event when the user starts typing
-    console.log("Emitting 'typing' event...");
     handleTyping();
 
-    // Clear the previous timeout and set a new one
     if (typingTimeout) {
       clearTimeout(typingTimeout);
     }
 
-    // Emit "stoppedTyping" after 2 seconds of inactivity
     setTypingTimeout(
       setTimeout(() => {
-        console.log("Emitting 'stoppedTyping' event...");
         handleStoppedTyping();
       }, 2000)
     );
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      console.log('Sending message:', newMessage);
+    // Prevent sending on Enter if a message is already being sent
+    if (e.key === 'Enter' && !isSending) {
       handleSendMessage();
     }
   };
@@ -61,9 +56,13 @@ const ChatInput: React.FC<ChatInputProps> = ({
         value={newMessage}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
+        // Disable the input while sending
+        disabled={isSending}
       />
-      <Button variant="contained" onClick={handleSendMessage}>
-        Send
+      {/* 3. USE THE 'isSending' PROP TO DISABLE THE BUTTON */}
+      <Button variant="contained" onClick={handleSendMessage} disabled={isSending}>
+        {/* 4. (Optional) Change button text to give user feedback */}
+        {isSending ? 'Sending...' : 'Send'}
       </Button>
     </Box>
   );

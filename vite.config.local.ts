@@ -14,7 +14,7 @@ export default mergeConfig(
           target: 'http://localhost:5000',
           ws: true,
           changeOrigin: true,
-          rewrite: path => path.replace(/^\/api/, ''),
+          // The 'rewrite' rule has been removed from here.
         },
       },
     },

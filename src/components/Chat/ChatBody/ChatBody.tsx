@@ -9,6 +9,7 @@ interface User {
 interface ChatBodyProps {
   filteredMessages: ChatMessage[];
   myUserId: string;
+  isLoadingMessages?: boolean;
 }
 
 const ChatBody: React.FC<ChatBodyProps> = ({ filteredMessages, myUserId }) => {
