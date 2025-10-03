@@ -1,6 +1,5 @@
 import { defineConfig, mergeConfig } from 'vite';
 import baseConfig from './vite.config.base';
-import viteCompression from 'vite-plugin-compression';
 
 export default mergeConfig(
   baseConfig,
@@ -9,14 +8,14 @@ export default mergeConfig(
       'process.env.NODE_ENV': JSON.stringify('production'),
     },
     plugins: [
-      viteCompression({
-        algorithm: 'gzip',
-        ext: '.gz',
-      }),
-      viteCompression({
-        algorithm: 'brotliCompress',
-        ext: '.br',
-      }),
+      // viteCompression({
+      //   algorithm: 'gzip',
+      //   ext: '.gz',
+      // }),
+      // viteCompression({
+      //   algorithm: 'brotliCompress',
+      //   ext: '.br',
+      // }),
     ],
     build: {
       target: 'es2018',
