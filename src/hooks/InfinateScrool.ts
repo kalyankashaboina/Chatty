@@ -39,16 +39,16 @@ const useInfiniteScroll = ({
   threshold = 1,
   onTopReach,
   onBottomReach,
-  throttleMs = 100, // changed default to 100ms for better throttling
+  throttleMs = 100,
 }: UseInfiniteScrollProps) => {
   const [isAtTop, setIsAtTop] = useState(false);
   const [isAtBottom, setIsAtBottom] = useState(false);
 
   useEffect(() => {
-    const scrollHandler = () => {
-      const container = isWindow ? window : containerRef.current;
-      if (!container) return;
+    const container = isWindow ? window : containerRef.current;
+    if (!container) return;
 
+    const scrollHandler = () => {
       if (container instanceof HTMLElement) {
         const scrollTop = container.scrollTop;
         const scrollHeight = container.scrollHeight;
@@ -63,7 +63,6 @@ const useInfiniteScroll = ({
         if (nearTop && onTopReach) onTopReach();
         if (nearBottom && onBottomReach) onBottomReach();
       } else if (container === window) {
-        // Window scroll values
         const scrollTop = window.scrollY || document.documentElement.scrollTop;
         const scrollHeight = document.documentElement.scrollHeight;
         const clientHeight = window.innerHeight;
@@ -81,20 +80,18 @@ const useInfiniteScroll = ({
 
     const throttledScrollHandler = throttle(scrollHandler, throttleMs);
 
-    if (isWindow) {
-      window.addEventListener('scroll', throttledScrollHandler);
-    } else if (containerRef.current) {
-      containerRef.current.addEventListener('scroll', throttledScrollHandler);
+    // ✅ Attach listener
+    if (container instanceof HTMLElement || container === window) {
+      container.addEventListener('scroll', throttledScrollHandler);
     }
 
-    // Initial check on mount
+    // ✅ Run initial check
     throttledScrollHandler();
 
     return () => {
-      if (isWindow) {
-        window.removeEventListener('scroll', throttledScrollHandler);
-      } else if (containerRef.current) {
-        containerRef.current.removeEventListener('scroll', throttledScrollHandler);
+      // ✅ Remove from the same cached container
+      if (container instanceof HTMLElement || container === window) {
+        container.removeEventListener('scroll', throttledScrollHandler);
       }
     };
   }, [containerRef, isWindow, threshold, onTopReach, onBottomReach, throttleMs]);
