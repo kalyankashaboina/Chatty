@@ -18,28 +18,28 @@ const baseConfig = defineConfig({
         theme_color: '#7c3aed',
         icons: [
           {
-            src: '/icons/pwa-icon-16.png',
+            src: '/icons/pwa-icon',
             sizes: '16x16',
             type: 'image/png',
           },
           {
-            src: '/icons/pwa-icon-32.png',
+            src: '/icons/pwa-icon',
             sizes: '32x32',
             type: 'image/png',
           },
           {
-            src: '/icons/pwa-icon-48.png',
+            src: '/icons/pwa-icon',
             sizes: '48x48',
             type: 'image/png',
           },
           {
-            src: '/icons/pwa-icon-192.png',
+            src: '/icons/pwa-icon',
             sizes: '192x192',
             type: 'image/png',
             purpose: 'any',
           },
           {
-            src: '/icons/pwa-icon-512.png',
+            src: '/icons/pwa-icon',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'any maskable',

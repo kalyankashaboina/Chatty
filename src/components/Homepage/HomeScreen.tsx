@@ -34,7 +34,6 @@ const HomeScreen: React.FC = () => {
     { skip: !loggedInUser || !selectedUserId }
   );
 
-  // 3. ✅ CALLED the hook here to get the `sendMessage` function and register listeners
   const { sendMessage } = useSocketEvents({ myUserId, selectedUserId });
 
   // --- Side Effects ---
@@ -51,7 +50,6 @@ const HomeScreen: React.FC = () => {
     }
   }, [loggedInUser]);
 
-  // --- Render Logic (Edge Cases Handled) ---
   if (isUsersLoading) {
     return (
       <Box

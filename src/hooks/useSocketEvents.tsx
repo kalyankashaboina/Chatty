@@ -14,8 +14,6 @@ interface UseSocketEventsProps {
 const useSocketEvents = ({ myUserId, selectedUserId }: UseSocketEventsProps) => {
   const dispatch = useAppDispatch();
 
-  // --- EVENT HANDLERS THAT UPDATE THE RTK QUERY CACHE ---
-
   const handleNewMessage = useCallback(
     (message: ChatMessage) => {
       console.log('📨 EVENT: "message" received:', message);
@@ -25,7 +23,7 @@ const useSocketEvents = ({ myUserId, selectedUserId }: UseSocketEventsProps) => 
         dispatch(
           api.util.updateQueryData('fetchMessages', { selectedUserId: selectedUserId! }, draft => {
             // Check for duplicates before adding, in case of race conditions
-            if (!draft.messages.find(m => m.id === message.id)) {
+            if (!draft.messages.find(m => m._id === message.id)) {
               draft.messages.push(message);
             }
           })
@@ -85,14 +83,15 @@ const useSocketEvents = ({ myUserId, selectedUserId }: UseSocketEventsProps) => 
       const payload = { recipientId, content };
       socket.emit('sendMessage', payload);
       console.log("🚀 Emitting 'sendMessage' event via hook with payload:", payload);
+      const tempId = new Date().toISOString();
 
-      // Perform an optimistic update for your own message
       const optimisticMessage: ChatMessage = {
-        id: new Date().toISOString(), // Temporary ID
+        id: tempId,
+        _id: tempId,
         sender: myUserId,
         receiver: recipientId,
         content: content,
-        timestamp: new Date(),
+        timestamp: new Date().toISOString(),
         type: 'text',
       };
 

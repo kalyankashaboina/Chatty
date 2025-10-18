@@ -1,4 +1,3 @@
-// ✅ User type for defining the structure of a user object
 export interface User {
   id: string;
   username: string;
@@ -6,15 +5,14 @@ export interface User {
   profilePic?: string;
 }
 
-// ✅ Enum to clearly define allowed message types
 export type MessageType = 'text' | 'image' | 'video' | 'audio';
 
-// ✅ ChatMessage type, updated for media support
 export interface ChatMessage {
+  _id?: string;
   id: string;
   sender: string;
   receiver: string;
-  content: string; // ⬅️ renamed from `text` to `content`
+  content: string;
   type: MessageType;
   timestamp?: Date | string;
 }

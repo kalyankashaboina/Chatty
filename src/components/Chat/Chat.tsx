@@ -30,7 +30,7 @@ const Chat: React.FC<ChatProps> = ({
   // isMobileView,
   setSelectedUser,
   isLoadingMessages,
-  sendMessage, // Get the sendMessage function from props
+  sendMessage,
 }) => {
   const [newMessage, setNewMessage] = useState('');
   const user = JSON.parse(localStorage.getItem('user') || '{}');

@@ -14,7 +14,6 @@ export default mergeConfig(
           target: 'http://localhost:5000',
           ws: true,
           changeOrigin: true,
-          // The 'rewrite' rule has been removed from here.
         },
       },
     },

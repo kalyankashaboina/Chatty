@@ -1,0 +1,39 @@
+name: CI - Chatty App Quality Gate
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  quality-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: ⬇️ Checkout Code
+        uses: actions/checkout@v3
+
+      - name: ⚙️ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+
+      - name: 📦 Install Dependencies
+        run: npm ci
+
+      - name: 🧹 Lint Check
+        run: npm run lint
+
+      - name: 💅 Prettier Format Check
+        run: npm run format:check
+
+      - name: 🧪 Type Check
+        run: npx tsc --noEmit
+
+      - name: 🔨 Build Production
+        run: npm run build
+
+      - name: ✅ Verify Build Output
+        run: test -d dist && echo "✅ Build successful" || (echo "❌ Build failed" && exit 1)

@@ -57,7 +57,7 @@ const ChatBody: React.FC<ChatBodyProps> = ({ filteredMessages, myUserId }) => {
         console.log(`Rendering message from ${msg.sender} (${isMeMessage ? 'me' : 'them'}):`, msg);
         return (
           <Box
-            key={msg.id}
+            key={msg._id}
             sx={{
               mb: 1,
               display: 'flex',
