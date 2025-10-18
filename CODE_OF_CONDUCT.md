@@ -19,7 +19,7 @@ Reporting
 
 If you experience or witness unacceptable behavior, contact the maintainers at:
 
-`security@your-org.example` (replace with the real project contact)
+`kalyankashaboina0@gmail.com` 
 
 When reporting, include:
 
