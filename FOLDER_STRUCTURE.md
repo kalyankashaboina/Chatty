@@ -26,6 +26,7 @@ This document describes the folder layout, naming conventions, coding standards,
 ## 2. Naming Conventions
 
 ### Components
+
 - Folders & files: **PascalCase** (e.g., `ChatWindow`, `VideoCall`)
 - Component names: **PascalCase** (`ChatWindow`)
 - Test files: `ComponentName.test.jsx` or `.test.tsx`
@@ -33,27 +34,34 @@ This document describes the folder layout, naming conventions, coding standards,
 - Only one component per folder (unless tightly coupled subcomponents).
 
 ### SCSS/CSS
+
 - Component styles: `ComponentName.module.scss`
 - Global styles: lower-case with hyphens (e.g., `global-styles.scss`)
 
 ### Functions & Utilities
+
 - Functions: **camelCase** (e.g., `sendMessage`)
 - Utility files: **camelCase** or lower-case with hyphens (e.g., `format-date.js`)
 
 ### Hooks
+
 - Custom hooks: **use** prefix + camelCase (e.g., `useChat`)
 - Hook files: `useHookName.js` (e.g., `useChat.js`)
 
 ### Assets (Images, Icons, Fonts)
+
 - lower-case, hyphens (e.g., `user-avatar.png`, `video-icon.svg`)
 
 ### Constants
+
 - UPPER_CASE with underscores (e.g., `MAX_COUNT.js`)
 
 ### Types/Interfaces (TypeScript)
+
 - PascalCase (e.g., `UserProfile.ts`)
 
 ### Config & Env Files
+
 - `vite.config.js`, `.env.local`
 
 ---

@@ -65,7 +65,6 @@ We are committed to providing a friendly, safe, and inclusive environment for ev
 - No harassment, discrimination, or abusive language.
 - Report unacceptable behavior to the maintainers.
 
-
 ---
 
 ## Support & Questions
