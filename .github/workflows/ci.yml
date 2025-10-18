@@ -8,6 +8,7 @@ on:
 
 jobs:
   quality-check:
+    name: Node.js 18 Quality Check
     runs-on: ubuntu-latest
 
     steps:
@@ -28,9 +29,10 @@ jobs:
 
       - name: 💅 Prettier Format Check
         run: npm run format:check
+        continue-on-error: false
 
       - name: 🧪 Type Check
-        run: npx tsc --noEmit
+        run: npm run type-check
 
       - name: 🔨 Build Production
         run: npm run build
