@@ -95,7 +95,15 @@ This document describes the folder layout, naming conventions, coding standards,
 
 ---
 
-## 5. Checklist Before PR Submission
+### 5. General Practices
+*   **Absolute Imports**: Always use absolute imports configured with `@/` (e.g., `import Button from '@/components/Button'`).
+*   **Environment Variables**: Prefix all environment variables with `VITE_` (e.g., `import.meta.env.VITE_API_URL`). Never commit sensitive keys.
+*   **Clean Code**: Do not commit commented-out code. Keep functions small and focused on a single task.
+*   **Accessibility (a11y)**: All UI must be accessible. Use semantic HTML, ARIA attributes, and provide `alt` text for images.
+
+---
+
+## 6. Checklist Before PR Submission
 
 - [ ] All files are in correct folders.
 - [ ] Naming conventions are followed.
@@ -110,7 +118,7 @@ This document describes the folder layout, naming conventions, coding standards,
 
 ---
 
-## 6. Best Practices & Tips
+## 7. Best Practices & Tips
 
 - **Keep components small, focused, and independent.**
 - **Use custom hooks and utilities for code reuse.**
@@ -119,7 +127,7 @@ This document describes the folder layout, naming conventions, coding standards,
 
 ---
 
-## 7. Need Help?
+## 8. Need Help?
 
 If you have any doubts or are unsure about folder structure, coding style, or anything else, don’t hesitate to reach out or open a discussion.  
 **Following these guidelines helps keep our codebase healthy and easy to maintain!**
