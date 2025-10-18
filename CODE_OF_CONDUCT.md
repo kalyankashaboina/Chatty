@@ -19,7 +19,7 @@ Reporting
 
 If you experience or witness unacceptable behavior, contact the maintainers at:
 
-`kalyankashaboina0@gmail.com` 
+`kalyankashaboina0@gmail.com`
 
 When reporting, include:
 
