@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Dialog,
@@ -13,74 +13,45 @@ import ChatBody from './ChatBody/ChatBody';
 import ChatInput from './ChatInput/ChatInput';
 import ChatHeader from './ChatHeader/ChatHeader';
 import { getSocket } from '../../utils/socket';
-import { useSendMessageMutation } from '@/store/slices/api';
 
+// The props interface is now simpler and expects the `sendMessage` function
 interface ChatProps {
   selectedUser: User | null;
   messages: ChatMessage[];
   isMobileView: boolean;
   setSelectedUser: React.Dispatch<React.SetStateAction<User | null>>;
   isLoadingMessages: boolean;
+  sendMessage: (recipientId: string, content: string) => void;
 }
 
 const Chat: React.FC<ChatProps> = ({
   selectedUser,
   messages,
+  // isMobileView,
   setSelectedUser,
   isLoadingMessages,
+  sendMessage, // Get the sendMessage function from props
 }) => {
   const [newMessage, setNewMessage] = useState('');
   const user = JSON.parse(localStorage.getItem('user') || '{}');
   const myUserId = user?.id || '';
 
-  // Dialog state
+  // Dialog state for feature announcements
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogMessage, setDialogMessage] = useState('');
 
-  const [sendMessage, { isLoading: isSendingMessage }] = useSendMessageMutation();
-
-  useEffect(() => {
-    const socket = getSocket();
-    if (!socket || !selectedUser) return;
-
-    const messageHandler = (message: any) => {
-      console.log('Received real-time message from socket:', message);
-      // In a production app, you would update the RTK Query cache here
-      // to show the new message without a full refetch.
-    };
-
-    socket.on('message', messageHandler);
-
-    return () => {
-      socket.off('message', messageHandler);
-    };
-  }, [selectedUser]);
-
-  // --- THIS IS THE UPDATED FUNCTION ---
-  const handleSendMessage = async () => {
+  // This function is now very simple: it just calls the function from props.
+  const handleSendMessage = () => {
     if (!newMessage.trim() || !selectedUser) return;
 
-    try {
-      // The payload is now much simpler.
-      // We no longer create or send a `chatId`. The backend handles this logic.
-      await sendMessage({
-        content: newMessage,
-        receiver: selectedUser.id,
-        // The 'type' field is also removed, as the backend defaults it to 'text'.
-      }).unwrap(); // .unwrap() throws an error on failure
+    // Call the function passed down from HomeScreen
+    sendMessage(selectedUser.id, newMessage);
 
-      // SUCCESS! Clear the input field.
-      setNewMessage('');
-
-      // RTK Query's `invalidatesTags` will automatically refetch the messages
-      // to show the new message you just sent.
-    } catch (error) {
-      console.error('Failed to send message:', error);
-      setDialogMessage('Failed to send the message. Please try again.');
-      setDialogOpen(true);
-    }
+    // Clear the input field
+    setNewMessage('');
   };
 
+  // The typing handlers still emit directly as they are UI-specific
   const handleTyping = () => {
     const socket = getSocket();
     if (socket && selectedUser) {
@@ -104,6 +75,7 @@ const Chat: React.FC<ChatProps> = ({
 
   const handleCloseDialog = () => setDialogOpen(false);
 
+  // Fallback UI when no user is selected
   if (!selectedUser) {
     return (
       <Box
@@ -125,6 +97,7 @@ const Chat: React.FC<ChatProps> = ({
     );
   }
 
+  // Main component JSX
   return (
     <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', height: '100vh' }}>
       <ChatHeader
@@ -140,7 +113,6 @@ const Chat: React.FC<ChatProps> = ({
           backgroundColor: '#f9f9f9',
         }}
       >
-        {/* Pass isLoadingMessages to ChatBody to show a spinner if needed */}
         <ChatBody
           filteredMessages={messages}
           myUserId={myUserId}
@@ -162,7 +134,7 @@ const Chat: React.FC<ChatProps> = ({
           handleSendMessage={handleSendMessage}
           handleTyping={handleTyping}
           handleStoppedTyping={handleStoppedTyping}
-          isSending={isSendingMessage}
+          isSending={false} // This is now false as the old loading state is gone
         />
       </Box>
       <Dialog open={dialogOpen} onClose={handleCloseDialog}>

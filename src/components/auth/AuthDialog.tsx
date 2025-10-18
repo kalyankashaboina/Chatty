@@ -1,4 +1,5 @@
 // src/components/Auth/AuthDialog.tsx
+
 import React, { useState } from 'react';
 import { Modal, Paper, Stack, Typography } from '@mui/material';
 import Login from './Login/LoginPage';
@@ -14,16 +15,33 @@ interface AuthDialogProps {
 const AuthDialog: React.FC<AuthDialogProps> = ({ onClose, defaultTab = 'login', open }) => {
   const [tab, setTab] = useState<'login' | 'register'>(defaultTab);
 
-  const handleTabSwitch = (tab: 'login' | 'register') => {
-    setTab(tab);
+  // --- LIFTED STATE ---
+  // We will manage error and loading state here in the parent
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  // When switching tabs, clear any previous errors for a better user experience
+  const handleTabSwitch = (newTab: 'login' | 'register') => {
+    if (tab !== newTab) {
+      setError(null); // Clear error on tab switch
+      setTab(newTab);
+    }
   };
 
   const handleSuccess = () => {
-    onClose(); // Close the dialog when login/register is successful
+    setError(null); // Clear any errors on success
+    onClose(); // Close the dialog
+  };
+
+  // If the modal is closed, reset the state
+  const handleClose = () => {
+    setError(null);
+    setTab('login'); // Reset to default tab
+    onClose();
   };
 
   return (
-    <Modal open={open} onClose={onClose} aria-labelledby="auth-dialog">
+    <Modal open={open} onClose={handleClose} aria-labelledby="auth-dialog">
       <Paper className={styles.dialog} sx={{ padding: 3 }}>
         <Stack direction="row" justifyContent="space-around" className={styles.tabs}>
           <Typography
@@ -42,8 +60,25 @@ const AuthDialog: React.FC<AuthDialogProps> = ({ onClose, defaultTab = 'login', 
           </Typography>
         </Stack>
 
-        {tab === 'login' && <Login onSuccess={handleSuccess} />}
-        {tab === 'register' && <Register onSuccess={handleSuccess} />}
+        {/* Pass the state and setters down as props */}
+        {tab === 'login' && (
+          <Login
+            onSuccess={handleSuccess}
+            error={error}
+            setError={setError}
+            loading={loading}
+            setLoading={setLoading}
+          />
+        )}
+        {tab === 'register' && (
+          <Register
+            onSuccess={handleSuccess}
+            error={error}
+            setError={setError}
+            loading={loading}
+            setLoading={setLoading}
+          />
+        )}
       </Paper>
     </Modal>
   );

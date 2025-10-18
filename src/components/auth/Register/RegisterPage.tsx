@@ -1,3 +1,5 @@
+// src/components/Auth/Register/RegisterPage.tsx
+
 import React, { useState } from 'react';
 import { TextField, Button, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
@@ -7,38 +9,40 @@ import { useRegisterMutation } from '@/store/slices/api';
 
 interface RegisterProps {
   onSuccess: () => void;
+  // --- PROPS FOR LIFTED STATE ---
+  error: string | null;
+  setError: (error: string | null) => void;
+  loading: boolean;
+  setLoading: (loading: boolean) => void;
 }
 
-const Register: React.FC<RegisterProps> = ({ onSuccess }) => {
+const Register: React.FC<RegisterProps> = ({ onSuccess, error, setError, loading, setLoading }) => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+
+  // Local state for error and loading is now removed
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-
   const [register] = useRegisterMutation();
 
   const handleRegister = async () => {
     setLoading(true);
     setError(null);
-
     try {
       const data = await register({ username, email, password }).unwrap();
-
-      // Save user + token to Redux state
-      dispatch(setCredentials({ user: data.user, token: data.token }));
-
+      dispatch(setCredentials({ user: data.user }));
       onSuccess();
-      navigate('/home'); // Redirect after successful registration
+      navigate('/home');
     } catch (err: any) {
       setError(err?.data?.message || 'Registration failed. Please try again.');
     } finally {
       setLoading(false);
     }
   };
+
+  const isFormInvalid = !username || !email || password.length < 6;
 
   return (
     <>
@@ -69,9 +73,10 @@ const Register: React.FC<RegisterProps> = ({ onSuccess }) => {
         variant="outlined"
         value={password}
         onChange={e => setPassword(e.target.value)}
+        helperText="Password must be at least 6 characters long."
       />
       {error && (
-        <Typography color="error" mb={2}>
+        <Typography color="error" mt={1} mb={2}>
           {error}
         </Typography>
       )}
@@ -80,7 +85,7 @@ const Register: React.FC<RegisterProps> = ({ onSuccess }) => {
         variant="contained"
         sx={{ mt: 2, backgroundColor: '#7c3aed', color: '#fff' }}
         onClick={handleRegister}
-        disabled={loading}
+        disabled={loading || isFormInvalid}
       >
         {loading ? 'Registering...' : 'Register'}
       </Button>

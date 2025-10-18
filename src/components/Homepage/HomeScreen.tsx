@@ -5,48 +5,45 @@ import { useSelector } from 'react-redux';
 import styles from './HomeScreen.module.css';
 import Sidebar from '../Sidebar/Sidebar';
 import Chat from '../Chat/Chat';
+// 1. ✅ REMOVED unused 'ChatMessage' import to clean up warnings
 import { User } from '../../types/types';
 import { initializeSocket } from '../../utils/socket';
 import { RootState } from '@/store';
 import { useFetchMessagesQuery, useFetchUsersQuery } from '@/store/slices/api';
+// 2. ✅ IMPORTED the hook correctly
+import useSocketEvents from '../../hooks/useSocketEvents';
 
 const HomeScreen: React.FC = () => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [isMobileView, setIsMobileView] = useState<boolean>(window.innerWidth <= 500);
 
-  // --- Data Fetching (Corrected for Cookie Auth) ---
+  // --- State and Data ---
+  const loggedInUser = useSelector((state: RootState) => state.auth.user);
+  const myUserId = loggedInUser?.id || '';
+  const selectedUserId = selectedUser?.id;
 
-  // 1. Fetch the list of users for the sidebar. This is perfect.
+  // --- Data Fetching from RTK Query ---
   const {
     data: usersResponse,
     isLoading: isUsersLoading,
     isError: isUsersError,
   } = useFetchUsersQuery(undefined);
 
-  // 2. Get the LOGGED IN USER from the Redux store.
-  // This is now our proof that the user is authenticated.
-  const loggedInUser = useSelector((state: RootState) => state.auth.user);
-  const selectedUserId = selectedUser?.id;
-
-  // 3. Fetch messages. The 'skip' condition now depends on 'loggedInUser'.
   const { data: messagesData, isLoading: isMessagesLoading } = useFetchMessagesQuery(
     { selectedUserId: selectedUserId! },
-    {
-      // This query will only run if the user is logged in AND a chat is selected.
-      skip: !loggedInUser || !selectedUserId,
-    }
+    { skip: !loggedInUser || !selectedUserId }
   );
 
-  // --- Side Effects ---
+  // 3. ✅ CALLED the hook here to get the `sendMessage` function and register listeners
+  const { sendMessage } = useSocketEvents({ myUserId, selectedUserId });
 
-  // Listener for mobile view resizing
+  // --- Side Effects ---
   useEffect(() => {
     const handleResize = () => setIsMobileView(window.innerWidth <= 500);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Initialize socket connection once the user object is available
   useEffect(() => {
     if (loggedInUser) {
       console.log('User is logged in, initializing socket...');
@@ -54,8 +51,7 @@ const HomeScreen: React.FC = () => {
     }
   }, [loggedInUser]);
 
-  // --- Render Logic ---
-
+  // --- Render Logic (Edge Cases Handled) ---
   if (isUsersLoading) {
     return (
       <Box
@@ -66,12 +62,12 @@ const HomeScreen: React.FC = () => {
     );
   }
 
-  if (isUsersError) {
+  if (isUsersError || !usersResponse) {
     return (
       <Box
         sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100dvh' }}
       >
-        <Typography color="error">Failed to load users.</Typography>
+        <Typography color="error">Failed to load users. Please refresh the page.</Typography>
       </Box>
     );
   }
@@ -97,6 +93,7 @@ const HomeScreen: React.FC = () => {
             isMobileView={false}
             setSelectedUser={setSelectedUser}
             isLoadingMessages={isMessagesLoading}
+            sendMessage={sendMessage}
           />
         </>
       ) : !selectedUser ? (
@@ -110,6 +107,7 @@ const HomeScreen: React.FC = () => {
           isMobileView={true}
           setSelectedUser={setSelectedUser}
           isLoadingMessages={isMessagesLoading}
+          sendMessage={sendMessage}
         />
       )}
     </Box>
