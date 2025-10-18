@@ -96,10 +96,11 @@ This document describes the folder layout, naming conventions, coding standards,
 ---
 
 ### 5. General Practices
-*   **Absolute Imports**: Always use absolute imports configured with `@/` (e.g., `import Button from '@/components/Button'`).
-*   **Environment Variables**: Prefix all environment variables with `VITE_` (e.g., `import.meta.env.VITE_API_URL`). Never commit sensitive keys.
-*   **Clean Code**: Do not commit commented-out code. Keep functions small and focused on a single task.
-*   **Accessibility (a11y)**: All UI must be accessible. Use semantic HTML, ARIA attributes, and provide `alt` text for images.
+
+- **Absolute Imports**: Always use absolute imports configured with `@/` (e.g., `import Button from '@/components/Button'`).
+- **Environment Variables**: Prefix all environment variables with `VITE_` (e.g., `import.meta.env.VITE_API_URL`). Never commit sensitive keys.
+- **Clean Code**: Do not commit commented-out code. Keep functions small and focused on a single task.
+- **Accessibility (a11y)**: All UI must be accessible. Use semantic HTML, ARIA attributes, and provide `alt` text for images.
 
 ---
 
