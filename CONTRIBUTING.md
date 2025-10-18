@@ -1,3 +1,61 @@
+Contributing to Chatty
+
+Thanks for your interest — contributions keep this project healthy and useful.
+
+Before filing issues or opening PRs, please read this guide so we can review and merge your work quickly.
+
+Quick start
+
+1. Read `FOLDER_STRUCTURE.md` and this `CONTRIBUTING.md`.
+2. Fork the repo and create a feature branch: `git checkout -b feature/your-feature`.
+3. Make small, focused commits and open a PR describing your change.
+
+Development setup
+
+- Clone: `git clone https://github.com/<your-username>/Chatty.git`
+- Install: `npm install`
+- Run: `npm run dev`
+
+Reporting bugs
+
+- Search existing issues first.
+- Use the bug report template in `.github/ISSUE_TEMPLATE/bug_report.md`.
+
+Feature requests
+
+- Use the feature request template in `.github/ISSUE_TEMPLATE/feature_request.md` and explain the user value.
+
+Pull request process (use the PR template)
+
+- We use the PR template located at `.github/PULL_REQUEST_TEMPLATE.md` — please complete it when opening a PR.
+- Branch naming: `feature/`, `fix/`, `chore/`.
+- Keep PRs small and document test/QA steps.
+
+Checklist before opening a PR
+
+- [ ] Follow `FOLDER_STRUCTURE.md` naming and layout.
+- [ ] Run linters and formatters: `npm run lint` and `npm run format`.
+- [ ] Run TypeScript checks: `npm run type-check`.
+- [ ] Add or update tests for new logic: `npm test`.
+- [ ] Update `CHANGELOG.md` if this PR introduces user-facing changes.
+
+Code review
+
+- Reviews focus on clarity, tests, performance, security and accessibility.
+- If your change is large or introduces a new public API, add a short design note in the PR.
+
+Communication & support
+
+- Use Issues for bug reports and feature requests.
+- Use Discussions for design or API conversations.
+- For security issues, follow `SECURITY.md`.
+
+Code of Conduct
+
+This project follows a code of conduct. See `CODE_OF_CONDUCT.md` for details.
+
+Thank you for contributing to Chatty — we appreciate your time and energy.
+
 # Contributing to Chattty
 
 Thank you for your interest in contributing to Chattty! We value all contributions and strive to maintain a welcoming, collaborative, and high-quality codebase.
@@ -12,65 +70,57 @@ Thank you for your interest in contributing to Chattty! We value all contributio
 2. **Development Setup**
    - Clone the repository:  
      `git clone https://github.com/<your-username>/chattty.git`
-   - Install dependencies:  
-     `npm install` or `yarn install`
-   - Start the development server:  
-     `npm run dev` or `yarn dev`
+   - Install dependencies:
 
----
+   # Contributing to Chatty
 
-## How to Contribute
+   Thanks for your interest — contributions keep this project healthy and useful.
 
-### Reporting Bugs
+   Before filing issues or opening PRs, please read this guide so we can review and merge your work quickly.
 
-- Search issues to verify if your bug has already been reported.
-- Provide a clear, descriptive title.
-- Include steps to reproduce, expected and actual behavior, and environment details (OS, browser, Chattty version).
+   Quick start
+   1. Read `FOLDER_STRUCTURE.md` and this `CONTRIBUTING.md`.
+   2. Fork the repo and create a feature branch: `git checkout -b feature/your-feature`.
+   3. Make small, focused commits and open a PR describing your change.
 
-### Suggesting Enhancements
+   Development setup
+   - Clone: `git clone https://github.com/<your-username>/Chatty.git`
+   - Install: `npm install`
+   - Run: `npm run dev`
 
-- Review existing issues and pull requests.
-- Open a new issue with:
-  - A clear, descriptive title.
-  - Detailed enhancement proposal.
-  - Rationale for its benefit to Chattty.
+   Reporting bugs
+   - Search existing issues first.
+   - Provide: a clear title, reproduction steps, expected vs actual behavior, environment (OS, Node/npm, browser) and relevant logs or screenshots.
 
-### Submitting Pull Requests
+   Feature requests
+   - Explain the problem, your proposed solution, and why it benefits the project.
+   - Include sketches, API suggestions, and notes about migration/compatibility if applicable.
 
-1. Fork the repository and create a feature branch from `main`.
-2. Ensure your changes adhere to our guidelines in [FOLDER_STRUCTURE.md](FOLDER_STRUCTURE.md).
-3. Co-locate styles and tests with component files.
-4. Lint and format your code.
-5. Add and run tests for your changes.
-6. Ensure the app runs error-free and all tests pass.
-7. Document new features or changes.
-8. Write clear, concise commit messages.
-9. Open a pull request describing your changes, linking related issues (e.g., “Closes #123”).
+   Pull request checklist
+   - [ ] Follow the folder & naming conventions in `FOLDER_STRUCTURE.md`.
+   - [ ] Lint and format your code (`npm run lint`).
+   - [ ] Add or update tests for new behavior (`npm test`).
+   - [ ] Keep changes small and focused.
+   - [ ] Document public API or UX changes in README or docs.
 
----
+   Branching & commits
+   - Create descriptive branch names: `feature/`, `fix/`, `chore/`.
+   - Write clear commit messages. Use present tense and include the reason for the change.
 
-## Folder Structure & Coding Standards
+   Code review
+   - Reviews focus on clarity, tests, performance, security and accessibility.
+   - Maintain backwards compatibility where possible. If breaking changes are required, document them clearly.
 
-- All code, components, styles, assets, and tests **must follow our folder structure and naming conventions** in [FOLDER_STRUCTURE.md](FOLDER_STRUCTURE.md).
-- PRs not following these guidelines may be requested to update for consistency and quality.
+   Communication
+   - Use Issues for tracking bugs and feature requests.
+   - Use Discussions for design conversations and non-actionable ideas.
 
----
+   Code of conduct
 
-## Code of Conduct
+   This project follows a code of conduct. Please be respectful and inclusive. See `CODE_OF_CONDUCT.md` for details.
 
-We are committed to providing a friendly, safe, and inclusive environment for everyone.
+   Security
 
-- Be respectful and considerate.
-- Welcome constructive feedback and diverse viewpoints.
-- No harassment, discrimination, or abusive language.
-- Report unacceptable behavior to the maintainers.
+   Report security issues following the guidance in `SECURITY.md`.
 
----
-
-## Support & Questions
-
-If you need help or have questions, please open an issue or start a discussion.
-
----
-
-Thank you for helping make Chattty better!
+   Thanks for helping improve Chatty — we appreciate your time and effort.

@@ -113,170 +113,148 @@ Auth
 
 Profile
 
-- GET /api/users/:id
-  - Response: { id, name, email, status }
+# Chatty — Frontend (React + TypeScript)
 
-Messages
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE) [![Vite](https://img.shields.io/badge/bundler-vite-brightgreen)](https://vitejs.dev/) [![React](https://img.shields.io/badge/framework-react-61DAFB?logo=react&logoColor=white)](https://reactjs.org/)
 
-- GET /api/chats/:chatId/messages?limit=20&before=<messageId>
-  - Response: { messages: [ { id, chatId, senderId, text, createdAt } ], hasMore }
+Chatty is a production-oriented single-page application (SPA) frontend for a real-time chat platform. It’s implemented with React, TypeScript and Vite and integrates with a REST API and Socket.IO for real-time features.
 
-- POST /api/chats/:chatId/messages
-  - Request: { text }
-  - Response: 201 Created { message: { id, chatId, senderId, text, createdAt } }
+Table of contents
 
-Auth handling
-
-- The frontend stores the JWT (or session token) in memory or an HTTP-only cookie set by the backend. If you store the token in localStorage, be aware of XSS risks and consider mitigation strategies.
+- About
+- Features
+- Tech stack
+- Quick start
+- Environment variables
+- Scripts
+- Project layout
+- Development
+- Contributing
+- Security
+- License
 
 ---
 
-## Socket events (client ↔ server)
+## About
 
-These are the commonly used Socket.IO events handled by `src/utils/socket.ts` and `src/hooks/useSocketEvents.tsx`.
+This repository contains the frontend application for Chatty. The UI focuses on performance, accessibility, and a pleasant developer experience. It connects to a backend REST API for persistent data and a Socket.IO server for real-time messaging and presence.
 
-- connection / disconnect — Socket connect lifecycle
-- auth:token — (client → server) send token after connect for authentication
-- user:online — (server → clients) broadcast when a user comes online
-- user:offline — (server → clients) broadcast when a user goes offline
-- message:send — (client → server) send a new message payload
-- message:receive — (server → clients) receive messages in real time
-- message:edit — edit notification
-- message:delete — delete notification
-- typing:start / typing:stop — typing indicators
-- message:read — read receipt (server or recipient emits)
+## Key features
 
-Example client flow
+- User authentication (register, login, password reset)
+- Real-time messaging (one-to-one and group chats)
+- Message history with pagination
+- Typing indicators and read receipts
+- Online presence / status
+- Responsive UI implemented with CSS Modules
 
-1. Connect socket
-2. Emit `auth:token` with JWT
-3. On `message:receive`, update chat store and UI
-4. Emit `message:send` when user submits a message
+## Tech stack
+
+- React (functional components + hooks)
+- TypeScript
+- Vite (dev server + build)
+- Socket.IO client
+- CSS Modules
+- Recommended tools: ESLint, Prettier, Jest + Testing Library
+
+---
+
+## Quick start
+
+Requirements: Node.js 16+ and a supported package manager (npm, pnpm or yarn).
+
+1. Clone the repo
+
+```powershell
+git clone https://github.com/kalyankashaboina/Chatty.git ; cd Chatty
+```
+
+2. Copy environment template and set values
+
+Create a `.env` in the project root or copy from an existing template (not committed):
+
+```powershell
+copy .env.example .env
+# then edit .env with your VITE_API_URL and VITE_SOCKET_URL
+```
+
+3. Install and run
+
+```powershell
+npm install
+npm run dev
+```
+
+Open http://localhost:5173 in your browser.
+
+---
+
+## Environment variables
+
+Only variables prefixed with `VITE_` are exposed to client-side code. Keep secrets out of source control and use your hosting platform's secrets for production.
+
+Common variables
+
+- `VITE_API_URL` (required) — Base URL for backend REST API
+- `VITE_SOCKET_URL` (required) — Socket.IO server URL
+- `VITE_SENTRY_DSN` (optional) — Sentry DSN for error reporting
+
+Add any additional feature flags or integration keys as needed.
 
 ---
 
 ## Scripts
 
-- `npm run dev` — dev server (Vite)
-- `npm run build` — create production build (output: `dist/`)
-- `npm run preview` — preview production build locally
-- `npm run lint` — run lint checks
-- `npm test` — run tests
+- `npm run dev` — Start Vite dev server
+- `npm run build` — Build production assets to `dist/`
+- `npm run preview` — Preview production build locally
+- `npm run lint` — Run linter
+- `npm test` — Run tests
 
 ---
 
-## Project layout
-
-High-level view (important files / folders)
+## Project layout (important files)
 
 - `src/`
   - `components/` — UI components grouped by feature
-  - `hooks/` — custom hooks (socket events, infinite scroll)
-  - `pages/` — route-level components (login, chat, home)
-  - `store/` — Redux or state slices
+  - `hooks/` — reusable hooks (socket events, infinite scroll, etc.)
+  - `pages/` — route-level views (Home, Chat, Auth)
+  - `store/` — Redux slices or other state management
   - `utils/` — axios instance, socket wrapper, helpers
-- `public/` — static assets
+- `public/` — static assets (images, icons)
 - `index.html` — app shell
 
-Refer to `FOLDER_STRUCTURE.md` for the complete map.
+See `FOLDER_STRUCTURE.md` for a complete layout and naming conventions.
 
 ---
 
-## Development notes & best practices
+## Development notes
 
-- Use the provided axios instance (`src/utils/axios.ts`) to ensure consistent headers and error handling.
-- Keep socket subscriptions in `useEffect` within `src/hooks/useSocketEvents.tsx` and clean up on unmount.
-- Add component-level tests where business logic is present (hooks, reducers, utils).
-- Use TypeScript types in `src/types/types.d.ts` to document API shapes.
+- Use the shared axios instance at `src/utils/axios.ts` for API calls to centralize headers and error handling.
+- Keep socket lifecycle code in `src/hooks/useSocketEvents.tsx` and clean up listeners on unmount.
+- Co-locate component styles and tests next to components using CSS Modules.
+- Prefer TypeScript types in `src/types/types.d.ts` for API shapes and component props.
 
----
-
-## CI / Deployment
-
-Recommended: GitHub Actions for CI and Vercel or Netlify for hosting the frontend static site.
-
-Example (summary)
-
-- CI checks: install, lint, test, build
-- Deploy: build artifacts and publish `dist/` to Vercel/Netlify
-
-If you want, I can add a sample `.github/workflows/ci.yml` and a `vercel.json` configuration snippet.
-
----
-
-## Security
-
-- Prefer HTTP-only, secure cookies for auth tokens to reduce XSS risk.
-- Use HTTPS in production and set appropriate CORS policies on the backend.
-- Validate and sanitize user inputs on the server.
-- Rate-limit message endpoints and socket connections on the backend.
+If you want, I can add a sample GitHub Actions workflow and deployment configuration.
 
 ---
 
 ## Contributing
 
-Preferred workflow
-
-1. Fork the repo
-2. Create a feature branch: `git checkout -b feature/your-feature`
-3. Commit changes with descriptive messages
-4. Open a pull request describing the change and context
-
-Checklist for PRs
-
-- [ ] Tests for new behavior or bug fix
-- [ ] Linting passes locally
-- [ ] Code follows the existing style and uses TypeScript types
-- [ ] Update `FOLDER_STRUCTURE.md` or README if the change affects usage
-
-PR review notes
-
-- Keep PRs small and focused
-- Include screenshots or a short screencast for UI changes
+Please read `CONTRIBUTING.md` for contribution guidelines, PR checklist, and coding standards.
 
 ---
 
-## Troubleshooting
+## Security & reporting
 
-- Socket not connecting: verify `VITE_SOCKET_URL` and backend socket is running; check the browser console for CORS or auth errors.
-- CORS errors: ensure backend has the correct origin whitelisted.
-- Missing env vars: restart dev server after changing `.env`.
-- Build failures: run `npm run build` locally and inspect stack trace; check TypeScript errors.
-
-If problems persist, open an issue with steps to reproduce, relevant logs and screenshots.
-
----
-
-## Screenshots
-
-Add screenshots to `public/images/` and reference them here. Example:
-
-![Chatty - main chat screen](public/images/screenshot-main.png)
-
-_(Replace the placeholder with real screenshots or a link to a demo video.)_
-
----
-
-## Maintainers
-
-- kalyankashaboina
-
-## Acknowledgements
-
-- Built with React, Vite and Socket.IO. Thanks to the open-source community.
+If you discover a security vulnerability, see `SECURITY.md` for reporting instructions.
 
 ---
 
 ## License
 
-MIT — see `LICENSE` for details.
+MIT — see `LICENSE` file.
 
 ---
 
-If you'd like, I can also:
-
-- Add a CI workflow file (`.github/workflows/ci.yml`) that runs tests, lint and builds.
-- Add a `CONTRIBUTING.md` with templates, or a PR template.
-- Insert real screenshots and a short architecture diagram.
-
-Tell me which of those you'd like next and I'll add them.
+Maintainer: kalyankashaboina
