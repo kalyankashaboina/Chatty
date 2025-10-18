@@ -20,7 +20,6 @@ export const initializeSocket = (): Socket | null => {
   });
 
   socket.on('connect', () => console.log('✅ Socket connected:', socket!.id));
-  
   socket.on('disconnect', reason => console.warn('❌ Disconnected:', reason));
   socket.io.on('reconnect_attempt', attempt => console.log(`⚡ Reconnecting, attempt #${attempt}`));
   socket.io.on('reconnect', attempt => console.log(`✅ Reconnected after ${attempt} attempt(s)`));
