@@ -10,11 +10,11 @@ import {
   TextField,
   Button,
 } from '@mui/material';
-import { User } from '../../types/mesagetypes';
 import styles from './Sidebar.module.css';
 import { FiberManualRecord } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { logoutUser } from '../../services/authService';
+import type { User } from 'src/types/mesagetypes';
 
 interface SidebarProps {
   users: User[];

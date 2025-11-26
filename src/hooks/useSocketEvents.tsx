@@ -1,9 +1,8 @@
 import { useEffect, useCallback } from 'react';
-import { getSocket } from '@utils/socket';
-import { ChatMessage } from '@types/mesagetypes';
-// 1. ✅ IMPORT your generated API slice
 import { api } from '@store/slices/api';
-import { useAppDispatch } from '@/store/hooks';
+import { useAppDispatch } from '@store/hooks';
+import { getSocket } from '@utils/socket';
+import type { ChatMessage } from 'src/types/mesagetypes';
 
 // 2. ✅ SIMPLIFY Props: The hook now only needs to know who you are and who you're talking to.
 interface UseSocketEventsProps {

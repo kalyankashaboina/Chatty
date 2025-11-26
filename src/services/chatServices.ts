@@ -1,5 +1,5 @@
+import type { ChatMessage } from 'src/types/mesagetypes';
 import axiosInstance from '../utils/axios';
-import { ChatMessage } from '../types/mesagetypes';
 
 export interface PaginatedMessagesResponse {
   messages: ChatMessage[];

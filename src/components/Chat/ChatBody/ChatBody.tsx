@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Box, Typography } from '@mui/material';
-import { ChatMessage } from '../../../types/mesagetypes';
 import { getSocket } from '../../../utils/socket';
 import BubbleTypingIndicator from '../../Animations/BubbleTypingIndicator/BubbleTypingIndicator';
+import type { ChatMessage } from 'src/types/mesagetypes';
 interface User {
   senderId: string;
 }

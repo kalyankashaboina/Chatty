@@ -1,24 +1,21 @@
 import { useEffect, useState } from 'react';
 import { Box, CircularProgress, Typography } from '@mui/material';
-import { useSelector } from 'react-redux';
 
 import styles from './HomeScreen.module.css';
 import Sidebar from '../Sidebar/Sidebar';
 import Chat from '../Chat/Chat';
-// 1. ✅ REMOVED unused 'ChatMessage' import to clean up warnings
-import { User } from '../../types/mesagetypes';
 import { initializeSocket } from '../../utils/socket';
-import { RootState } from '@/store';
 import { useFetchMessagesQuery, useFetchUsersQuery } from '@store/slices/api';
-// 2. ✅ IMPORTED the hook correctly
 import useSocketEvents from '../../hooks/useSocketEvents';
+import { useAppSelector } from '@store/hooks';
+import type { User } from 'src/types/mesagetypes';
 
 const HomeScreen: React.FC = () => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [isMobileView, setIsMobileView] = useState<boolean>(window.innerWidth <= 500);
 
   // --- State and Data ---
-  const loggedInUser = useSelector((state: RootState) => state.auth.user);
+  const loggedInUser = useAppSelector((state) => state.auth.user);
   const myUserId = loggedInUser?.id || '';
   const selectedUserId = selectedUser?.id;
 

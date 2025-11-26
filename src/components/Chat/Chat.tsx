@@ -8,11 +8,11 @@ import {
   Button,
   Typography,
 } from '@mui/material';
-import { ChatMessage, User } from '../../types/mesagetypes';
 import ChatBody from './ChatBody/ChatBody';
 import ChatInput from './ChatInput/ChatInput';
 import ChatHeader from './ChatHeader/ChatHeader';
 import { getSocket } from '../../utils/socket';
+import type { ChatMessage, User } from 'src/types/mesagetypes';
 
 // The props interface is now simpler and expects the `sendMessage` function
 interface ChatProps {

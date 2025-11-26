@@ -1,12 +1,14 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
-import viteImagemin from 'vite-plugin-imagemin';
+import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
 import path from 'path';
 
-const baseConfig = defineConfig({
+export default defineConfig({
   plugins: [
     react(),
+
+    // ----- PWA CONFIG -----
     VitePWA({
       registerType: 'autoUpdate',
       manifest: {
@@ -48,14 +50,28 @@ const baseConfig = defineConfig({
         ],
       },
     }),
-    viteImagemin({
-      gifsicle: { optimizationLevel: 7 },
-      optipng: { optimizationLevel: 7 },
-      mozjpeg: { quality: 75 },
-      svgo: undefined,
-      webp: { quality: 75 },
+
+    // ----- IMAGE OPTIMIZATION (NEW PLUGIN) -----
+    ViteImageOptimizer({
+      png: {
+        quality: 75,
+      },
+      jpeg: {
+        quality: 75,
+      },
+      webp: {
+        lossless: false,
+        quality: 75,
+      },
+      svg: {
+        multipass: true,
+      },
+      gif: {
+        optimizationLevel: 3,
+      },
     }),
   ],
+
   resolve: {
     alias: {
       '@components': path.resolve(__dirname, 'src/components'),
@@ -70,5 +86,3 @@ const baseConfig = defineConfig({
     },
   },
 });
-
-export default baseConfig;
