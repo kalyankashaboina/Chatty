@@ -5,7 +5,8 @@ interface AuthenticatedSocket extends Socket {
 }
 
 let socket: AuthenticatedSocket | null = null;
-const SOCKET_URL = import.meta.env.VITE_API_URL || 'https://chatty-server-uhm7.onrender.com';
+const SOCKET_URL =
+  (global as any).importMeta?.env?.VITE_API_URL || 'https://chatty-server-uhm7.onrender.com';
 
 export const initializeSocket = (): Socket | null => {
   if (socket) return socket;
@@ -20,12 +21,14 @@ export const initializeSocket = (): Socket | null => {
   });
 
   socket.on('connect', () => console.log('✅ Socket connected:', socket!.id));
-  socket.on('disconnect', reason => console.warn('❌ Disconnected:', reason));
-  socket.io.on('reconnect_attempt', attempt => console.log(`⚡ Reconnecting, attempt #${attempt}`));
-  socket.io.on('reconnect', attempt => console.log(`✅ Reconnected after ${attempt} attempt(s)`));
-  socket.io.on('reconnect_error', err => console.error('❗ Reconnect error:', err.message));
+  socket.on('disconnect', (reason) => console.warn('❌ Disconnected:', reason));
+  socket.io.on('reconnect_attempt', (attempt) =>
+    console.log(`⚡ Reconnecting, attempt #${attempt}`),
+  );
+  socket.io.on('reconnect', (attempt) => console.log(`✅ Reconnected after ${attempt} attempt(s)`));
+  socket.io.on('reconnect_error', (err) => console.error('❗ Reconnect error:', err.message));
   socket.io.on('reconnect_failed', () => console.error('❌ Permanent reconnect failure.'));
-  socket.on('connect_error', err => console.error('🚫 Connection error:', err.message));
+  socket.on('connect_error', (err) => console.error('🚫 Connection error:', err.message));
 
   return socket;
 };

@@ -34,7 +34,7 @@ const ForgotPassword: React.FC = () => {
         margin="normal"
         variant="outlined"
         value={email}
-        onChange={e => setEmail(e.target.value)}
+        onChange={(e) => setEmail(e.target.value)}
         disabled={loading} // Disable input while loading
       />
 

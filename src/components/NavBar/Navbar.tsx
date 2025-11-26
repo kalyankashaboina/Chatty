@@ -8,8 +8,8 @@ import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { logout as clearAuthAction } from '../../store/slices/authSlice';
-import { useLogoutMutation } from '@/store/slices/api';
-import { disconnectSocket } from '@/utils/socket';
+import { useLogoutMutation } from '@store/slices/api';
+import { disconnectSocket } from '@utils/socket';
 
 interface NavbarProps {
   onToggleTheme: () => void;

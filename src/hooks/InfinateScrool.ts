@@ -27,7 +27,7 @@ const throttle = (func: () => void, limit: number) => {
             lastRan = now;
           }
         },
-        limit - (now - lastRan)
+        limit - (now - lastRan),
       );
     }
   };

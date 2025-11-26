@@ -2,7 +2,7 @@ import type { Config } from 'jest';
 
 const config: Config = {
   preset: 'ts-jest',
-  testEnvironment: 'jsdom',
+  testEnvironment: 'jest-environment-jsdom',
 
   roots: ['<rootDir>/src'],
 
@@ -33,7 +33,6 @@ const config: Config = {
     '^@services/(.*)$': '<rootDir>/src/services/$1',
     '^@constants/(.*)$': '<rootDir>/src/constants/$1',
     '^@assets/(.*)$': '<rootDir>/src/assets/$1',
-    '^@types/(.*)$': '<rootDir>/src/types/$1',
     '^@router/(.*)$': '<rootDir>/src/router/$1',
   },
 

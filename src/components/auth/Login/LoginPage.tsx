@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux';
 import { setCredentials } from '../../../store/slices/authSlice';
 import { initializeSocket } from '../../../utils/socket';
 import { GoogleLogin } from '@react-oauth/google';
-import { useLoginMutation, useLoginWithGoogleMutation } from '@/store/slices/api';
+import { useLoginMutation, useLoginWithGoogleMutation } from '@store/slices/api';
 
 interface LoginProps {
   onSuccess: () => void;
@@ -72,13 +72,13 @@ const Login: React.FC<LoginProps> = ({ onSuccess, error, setError, loading, setL
     <Stack spacing={2}>
       <Typography variant="h6">Login</Typography>
 
-      <TextField fullWidth label="Email" value={email} onChange={e => setEmail(e.target.value)} />
+      <TextField fullWidth label="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
       <TextField
         fullWidth
         label="Password"
         type="password"
         value={password}
-        onChange={e => setPassword(e.target.value)}
+        onChange={(e) => setPassword(e.target.value)}
       />
 
       {error && <Typography color="error">{error}</Typography>}
@@ -98,7 +98,7 @@ const Login: React.FC<LoginProps> = ({ onSuccess, error, setError, loading, setL
       </Typography>
 
       <GoogleLogin
-        onSuccess={res => {
+        onSuccess={(res) => {
           if (res.credential) {
             handleGoogleLogin(res.credential);
           } else {

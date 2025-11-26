@@ -1,8 +1,7 @@
 // src/store/api.ts
-
-import { ChatMessage } from '@/types/types';
-import { disconnectSocket } from '@/utils/socket';
+import { disconnectSocket } from '@utils/socket';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import type { ChatMessage } from 'src/types/mesagetypes';
 
 export interface PaginatedMessagesResponse {
   messages: ChatMessage[];
@@ -21,9 +20,9 @@ export const api = createApi({
     credentials: 'include',
   }),
   tagTypes: ['Messages', 'Users'],
-  endpoints: builder => ({
+  endpoints: (builder) => ({
     login: builder.mutation<AuthResponse, { email: string; password: string }>({
-      query: body => ({
+      query: (body) => ({
         url: '/login',
         method: 'POST',
         body,
@@ -40,12 +39,12 @@ export const api = createApi({
 
     register: builder.mutation<AuthResponse, { username: string; email: string; password: string }>(
       {
-        query: body => ({
+        query: (body) => ({
           url: '/register',
           method: 'POST',
           body,
         }),
-      }
+      },
     ),
 
     logout: builder.mutation<void, void>({
@@ -75,10 +74,10 @@ export const api = createApi({
     >({
       query: ({ selectedUserId, page = 1 }) =>
         `/chat/last20?selectedUserId=${selectedUserId}&page=${page}`,
-      providesTags: result => {
+      providesTags: (result) => {
         if (result && result.messages) {
           return [
-            ...result.messages.map(msg => ({ type: 'Messages' as const, id: msg.id })),
+            ...result.messages.map((msg) => ({ type: 'Messages' as const, id: msg.id })),
             { type: 'Messages' as const, id: 'LIST' },
           ];
         }

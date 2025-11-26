@@ -2,6 +2,7 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 import viteImagemin from 'vite-plugin-imagemin';
+import path from 'path';
 
 const baseConfig = defineConfig({
   plugins: [
@@ -51,13 +52,21 @@ const baseConfig = defineConfig({
       gifsicle: { optimizationLevel: 7 },
       optipng: { optimizationLevel: 7 },
       mozjpeg: { quality: 75 },
-      svgo: {},
+      svgo: undefined,
       webp: { quality: 75 },
     }),
   ],
   resolve: {
     alias: {
-      '@': '/src',
+      '@components': path.resolve(__dirname, 'src/components'),
+      '@pages': path.resolve(__dirname, 'src/pages'),
+      '@hooks': path.resolve(__dirname, 'src/hooks'),
+      '@utils': path.resolve(__dirname, 'src/utils'),
+      '@store': path.resolve(__dirname, 'src/store'),
+      '@services': path.resolve(__dirname, 'src/services'),
+      '@constants': path.resolve(__dirname, 'src/constants'),
+      '@assets': path.resolve(__dirname, 'src/assets'),
+      '@router': path.resolve(__dirname, 'src/router'),
     },
   },
 });

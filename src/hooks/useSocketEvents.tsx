@@ -1,8 +1,8 @@
 import { useEffect, useCallback } from 'react';
-import { getSocket } from '@/utils/socket';
-import { ChatMessage } from '@/types/types';
+import { getSocket } from '@utils/socket';
+import { ChatMessage } from '@types/mesagetypes';
 // 1. ✅ IMPORT your generated API slice
-import { api } from '@/store/slices/api';
+import { api } from '@store/slices/api';
 import { useAppDispatch } from '@/store/hooks';
 
 // 2. ✅ SIMPLIFY Props: The hook now only needs to know who you are and who you're talking to.
@@ -21,16 +21,20 @@ const useSocketEvents = ({ myUserId, selectedUserId }: UseSocketEventsProps) => 
       // Edge Case: Only update the cache if the message is for the currently active chat
       if (message.sender === selectedUserId || message.receiver === selectedUserId) {
         dispatch(
-          api.util.updateQueryData('fetchMessages', { selectedUserId: selectedUserId! }, draft => {
-            // Check for duplicates before adding, in case of race conditions
-            if (!draft.messages.find(m => m._id === message.id)) {
-              draft.messages.push(message);
-            }
-          })
+          api.util.updateQueryData(
+            'fetchMessages',
+            { selectedUserId: selectedUserId! },
+            (draft) => {
+              // Check for duplicates before adding, in case of race conditions
+              if (!draft.messages.find((m) => m._id === message.id)) {
+                draft.messages.push(message);
+              }
+            },
+          ),
         );
       }
     },
-    [dispatch, selectedUserId]
+    [dispatch, selectedUserId],
   );
 
   const handleUserOnline = useCallback(
@@ -38,31 +42,31 @@ const useSocketEvents = ({ myUserId, selectedUserId }: UseSocketEventsProps) => 
       console.log('🟢 EVENT: "userOnline" received for userId:', data.userId);
       // Also update the 'fetchUsers' cache
       dispatch(
-        api.util.updateQueryData('fetchUsers', undefined, draft => {
+        api.util.updateQueryData('fetchUsers', undefined, (draft) => {
           const user = (draft as any)?.users?.find((u: any) => u.id === data.userId);
           if (user) {
             user.isOnline = true;
           }
-        })
+        }),
       );
     },
-    [dispatch]
+    [dispatch],
   );
 
   const handleUserOffline = useCallback(
     (data: { userId: string }) => {
       console.log('🔴 EVENT: "userOffline" received for userId:', data.userId);
       dispatch(
-        api.util.updateQueryData('fetchUsers', undefined, draft => {
+        api.util.updateQueryData('fetchUsers', undefined, (draft) => {
           const user = (draft as any)?.users?.find((u: any) => u.id === data.userId);
           if (user) {
             user.isOnline = false;
             user.lastSeen = new Date().toISOString();
           }
-        })
+        }),
       );
     },
-    [dispatch]
+    [dispatch],
   );
 
   // const handleTyping = useCallback((data: { senderId: string }) => {
@@ -96,12 +100,12 @@ const useSocketEvents = ({ myUserId, selectedUserId }: UseSocketEventsProps) => 
       };
 
       dispatch(
-        api.util.updateQueryData('fetchMessages', { selectedUserId: recipientId }, draft => {
+        api.util.updateQueryData('fetchMessages', { selectedUserId: recipientId }, (draft) => {
           draft.messages.push(optimisticMessage);
-        })
+        }),
       );
     },
-    [dispatch, myUserId]
+    [dispatch, myUserId],
   );
 
   // --- EFFECT TO REGISTER AND CLEAN UP LISTENERS ---

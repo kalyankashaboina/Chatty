@@ -10,7 +10,7 @@ import {
   TextField,
   Button,
 } from '@mui/material';
-import { User } from '../../types/types';
+import { User } from '../../types/mesagetypes';
 import styles from './Sidebar.module.css';
 import { FiberManualRecord } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
@@ -26,8 +26,8 @@ const Sidebar: React.FC<SidebarProps> = ({ users, selectedUser, setSelectedUser 
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
 
-  const filteredUsers = users.filter(user =>
-    user.username?.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredUsers = users.filter((user) =>
+    user.username?.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   // Only one useEffect for updating --vh custom property
@@ -74,7 +74,7 @@ const Sidebar: React.FC<SidebarProps> = ({ users, selectedUser, setSelectedUser 
           variant="outlined"
           size="small"
           value={searchQuery}
-          onChange={e => setSearchQuery(e.target.value)}
+          onChange={(e) => setSearchQuery(e.target.value)}
         />
       </Box>
 
@@ -91,7 +91,7 @@ const Sidebar: React.FC<SidebarProps> = ({ users, selectedUser, setSelectedUser 
       <Box className={styles.sidebarListWrapper}>
         <List className={styles.sidebarList}>
           {filteredUsers.length > 0 ? (
-            filteredUsers.map(user => (
+            filteredUsers.map((user) => (
               <ListItemButton
                 key={user.id}
                 selected={user.id === selectedUser?.id}

@@ -3,9 +3,9 @@
 import React, { useState } from 'react';
 import { TextField, Button, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { useAppDispatch } from '@/store/hooks';
-import { setCredentials } from '@/store/slices/authSlice';
-import { useRegisterMutation } from '@/store/slices/api';
+import { useAppDispatch } from '@store/hooks';
+import { setCredentials } from '@store/slices/authSlice';
+import { useRegisterMutation } from '@store/slices/api';
 
 interface RegisterProps {
   onSuccess: () => void;
@@ -55,7 +55,7 @@ const Register: React.FC<RegisterProps> = ({ onSuccess, error, setError, loading
         margin="normal"
         variant="outlined"
         value={username}
-        onChange={e => setUsername(e.target.value)}
+        onChange={(e) => setUsername(e.target.value)}
       />
       <TextField
         fullWidth
@@ -63,7 +63,7 @@ const Register: React.FC<RegisterProps> = ({ onSuccess, error, setError, loading
         margin="normal"
         variant="outlined"
         value={email}
-        onChange={e => setEmail(e.target.value)}
+        onChange={(e) => setEmail(e.target.value)}
       />
       <TextField
         fullWidth
@@ -72,7 +72,7 @@ const Register: React.FC<RegisterProps> = ({ onSuccess, error, setError, loading
         type="password"
         variant="outlined"
         value={password}
-        onChange={e => setPassword(e.target.value)}
+        onChange={(e) => setPassword(e.target.value)}
         helperText="Password must be at least 6 characters long."
       />
       {error && (

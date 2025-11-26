@@ -22,5 +22,5 @@ createRoot(document.getElementById('root')!).render(
         </QueryClientProvider>
       </Provider>
     </GoogleOAuthProvider>
-  </StrictMode>
+  </StrictMode>,
 );

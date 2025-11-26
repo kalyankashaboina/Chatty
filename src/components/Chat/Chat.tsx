@@ -8,7 +8,7 @@ import {
   Button,
   Typography,
 } from '@mui/material';
-import { ChatMessage, User } from '../../types/types';
+import { ChatMessage, User } from '../../types/mesagetypes';
 import ChatBody from './ChatBody/ChatBody';
 import ChatInput from './ChatInput/ChatInput';
 import ChatHeader from './ChatHeader/ChatHeader';
@@ -68,7 +68,7 @@ const Chat: React.FC<ChatProps> = ({
 
   const handleCall = (type: 'audio' | 'video') => {
     setDialogMessage(
-      `The ${type} call feature is currently unavailable. This feature will be available soon!`
+      `The ${type} call feature is currently unavailable. This feature will be available soon!`,
     );
     setDialogOpen(true);
   };

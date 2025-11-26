@@ -51,5 +51,5 @@ export default mergeConfig(
         target: 'es2018',
       },
     },
-  })
+  }),
 );

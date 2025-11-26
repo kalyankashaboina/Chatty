@@ -10,17 +10,17 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use(
-  config => {
+  (config) => {
     return config;
   },
-  error => {
+  (error) => {
     return Promise.reject(error);
-  }
+  },
 );
 
 axiosInstance.interceptors.response.use(
-  response => response,
-  async error => {
+  (response) => response,
+  async (error) => {
     if (error.response && error.response.status === 401) {
       console.error('Session expired. Logging out.', error);
       try {
@@ -31,7 +31,7 @@ axiosInstance.interceptors.response.use(
       window.location.href = '/';
     }
     return Promise.reject(error);
-  }
+  },
 );
 
 export default axiosInstance;

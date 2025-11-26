@@ -6,10 +6,10 @@ import styles from './HomeScreen.module.css';
 import Sidebar from '../Sidebar/Sidebar';
 import Chat from '../Chat/Chat';
 // 1. ✅ REMOVED unused 'ChatMessage' import to clean up warnings
-import { User } from '../../types/types';
+import { User } from '../../types/mesagetypes';
 import { initializeSocket } from '../../utils/socket';
 import { RootState } from '@/store';
-import { useFetchMessagesQuery, useFetchUsersQuery } from '@/store/slices/api';
+import { useFetchMessagesQuery, useFetchUsersQuery } from '@store/slices/api';
 // 2. ✅ IMPORTED the hook correctly
 import useSocketEvents from '../../hooks/useSocketEvents';
 
@@ -31,7 +31,7 @@ const HomeScreen: React.FC = () => {
 
   const { data: messagesData, isLoading: isMessagesLoading } = useFetchMessagesQuery(
     { selectedUserId: selectedUserId! },
-    { skip: !loggedInUser || !selectedUserId }
+    { skip: !loggedInUser || !selectedUserId },
   );
 
   const { sendMessage } = useSocketEvents({ myUserId, selectedUserId });
@@ -76,7 +76,7 @@ const HomeScreen: React.FC = () => {
         id: user._id,
         username: user.username,
         isOnline: user.isOnline,
-      })
+      }),
     ) || [];
 
   return (

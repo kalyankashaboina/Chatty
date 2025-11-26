@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, IconButton, Typography } from '@mui/material';
 import { VideoCall, Call, ArrowBack } from '@mui/icons-material';
-import { User } from '../../../types/types';
+import { User } from '../../../types/mesagetypes';
 import styles from './ChatHeader.module.css';
 
 interface ChatHeaderProps {

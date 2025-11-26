@@ -1,6 +1,6 @@
 // src/store/slices/chatSlice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ChatMessage } from '../../types/types';
+import { ChatMessage } from '../../types/mesagetypes';
 
 interface ChatState {
   activeChatUserId: string | null;

@@ -22,7 +22,7 @@ const App = () => {
   }, [themeMode]);
 
   const toggleTheme = () => {
-    setThemeMode(prev => (prev === 'light' ? 'dark' : 'light'));
+    setThemeMode((prev) => (prev === 'light' ? 'dark' : 'light'));
   };
 
   const theme = useMemo(
@@ -42,7 +42,7 @@ const App = () => {
           },
         },
       }),
-    [themeMode]
+    [themeMode],
   );
 
   const handleOpenDialog = (tab: 'login' | 'register') => {

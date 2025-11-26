@@ -8,7 +8,7 @@ export const loginUser = async (email: string, password: string) => {
     return response.data;
   } catch (error: any) {
     throw new Error(
-      error?.response?.data?.message || 'Login failed. Please check your credentials.'
+      error?.response?.data?.message || 'Login failed. Please check your credentials.',
     );
   }
 };

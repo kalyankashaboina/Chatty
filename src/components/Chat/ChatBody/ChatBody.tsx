@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Box, Typography } from '@mui/material';
-import { ChatMessage } from '../../../types/types';
+import { ChatMessage } from '../../../types/mesagetypes';
 import { getSocket } from '../../../utils/socket';
 import BubbleTypingIndicator from '../../Animations/BubbleTypingIndicator/BubbleTypingIndicator';
 interface User {
@@ -52,7 +52,7 @@ const ChatBody: React.FC<ChatBodyProps> = ({ filteredMessages, myUserId }) => {
 
   return (
     <Box sx={{ flexGrow: 1, p: 2, overflowY: 'auto' }}>
-      {filteredMessages.map(msg => {
+      {filteredMessages.map((msg) => {
         const isMeMessage = isMe(msg.sender);
         console.log(`Rendering message from ${msg.sender} (${isMeMessage ? 'me' : 'them'}):`, msg);
         return (

@@ -21,7 +21,7 @@ const authSlice = createSlice({
       localStorage.setItem('user', JSON.stringify(action.payload.user));
       // No more token management here.
     },
-    logout: state => {
+    logout: (state) => {
       state.user = null;
       localStorage.removeItem('user');
       // No more token management here.

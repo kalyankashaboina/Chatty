@@ -36,7 +36,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
     setTypingTimeout(
       setTimeout(() => {
         handleStoppedTyping();
-      }, 2000)
+      }, 2000),
     );
   };
 
