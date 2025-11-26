@@ -1,126 +1,56 @@
-Contributing to Chatty
+# Contributor Guidelines
 
-Thanks for your interest — contributions keep this project healthy and useful.
+We are excited that you are interested in contributing to this project. This document outlines the standards and procedures for all development contributions to ensure a smooth and effective workflow.
 
-Before filing issues or opening PRs, please read this guide so we can review and merge your work quickly.
+## Core Principles
 
-Quick start
-
-1. Read `FOLDER_STRUCTURE.md` and this `CONTRIBUTING.md`.
-2. Fork the repo and create a feature branch: `git checkout -b feature/your-feature`.
-3. Make small, focused commits and open a PR describing your change.
-
-Development setup
-
-- Clone: `git clone https://github.com/<your-username>/Chatty.git`
-- Install: `npm install`
-- Run: `npm run dev`
-
-Reporting bugs
-
-- Search existing issues first.
-- Use the bug report template in `.github/ISSUE_TEMPLATE/bug_report.md`.
-
-Feature requests
-
-- Use the feature request template in `.github/ISSUE_TEMPLATE/feature_request.md` and explain the user value.
-
-Pull request process (use the PR template)
-
-- We use the PR template located at `.github/PULL_REQUEST_TEMPLATE.md` — please complete it when opening a PR.
-- Branch naming: `feature/`, `fix/`, `chore/`.
-- Keep PRs small and document test/QA steps.
-
-Checklist before opening a PR
-
-- [ ] Follow `FOLDER_STRUCTURE.md` naming and layout.
-- [ ] Run linters and formatters: `npm run lint` and `npm run format`.
-- [ ] Run TypeScript checks: `npm run type-check`.
-- [ ] Add or update tests for new logic: `npm test`.
-- [ ] Update `CHANGELOG.md` if this PR introduces user-facing changes.
-
-Code review
-
-- Reviews focus on clarity, tests, performance, security and accessibility.
-- If your change is large or introduces a new public API, add a short design note in the PR.
-
-Communication & support
-
-- Use Issues for bug reports and feature requests.
-- Use Discussions for design or API conversations.
-- For security issues, follow `SECURITY.md`.
-
-Code of Conduct
-
-This project follows a code of conduct. See `CODE_OF_CONDUCT.md` for details.
-
-Thank you for contributing to Chatty — we appreciate your time and energy.
-
-# Contributing to Chattty
-
-Thank you for your interest in contributing to Chattty! We value all contributions and strive to maintain a welcoming, collaborative, and high-quality codebase.
+- **Ownership:** Take pride in your work. Ensure your code is tested, documented, and adheres to the project's standards before submitting it for review.
+- **Communication:** Be clear and concise in your commit messages and pull request descriptions.
 
 ---
 
-## Getting Started
+## The Development Workflow
 
-1. **Read [FOLDER_STRUCTURE.md](FOLDER_STRUCTURE.md) first**  
-   All contributors must follow our folder structure, naming conventions, and coding quality standards.
+### 1. Branching Strategy
 
-2. **Development Setup**
-   - Clone the repository:  
-     `git clone https://github.com/<your-username>/chattty.git`
-   - Install dependencies:
+All work must be done on a feature branch. The `main` branch is protected and all changes must be merged via pull request.
 
-   # Contributing to Chatty
+- **Branching Source:** Always create your new branch from the latest `main`.
+- **Naming Convention:** Branches must be prefixed according to their purpose.
+  - `feature/<feature-description>` (e.g., `feature/user-profile-page`)
+  - `fix/<bug-description>` (e.g., `fix/login-form-validation`)
+  - `refactor/<area-of-refactor>` (e.g., `refactor/api-service-layer`)
+  - `docs/<documentation-update>` (e.g., `docs/update-readme`)
 
-   Thanks for your interest — contributions keep this project healthy and useful.
+### 2. Commit Hygiene
 
-   Before filing issues or opening PRs, please read this guide so we can review and merge your work quickly.
+We enforce the **Conventional Commits** specification. This practice is essential for maintaining a clean commit history and automating changelogs. Our pre-commit hook will lint your commit message.
 
-   Quick start
-   1. Read `FOLDER_STRUCTURE.md` and this `CONTRIBUTING.md`.
-   2. Fork the repo and create a feature branch: `git checkout -b feature/your-feature`.
-   3. Make small, focused commits and open a PR describing your change.
+- **Format:** `<type>(<optional-scope>): <subject>`
+- **Common Types:** `feat`, `fix`, `build`, `chore`, `ci`, `docs`, `perf`, `refactor`, `revert`, `style`, `test`.
 
-   Development setup
-   - Clone: `git clone https://github.com/<your-username>/Chatty.git`
-   - Install: `npm install`
-   - Run: `npm run dev`
+- **Examples:**
+  ```
+  feat(auth): implement password reset functionality
+  fix(header): correct responsive layout bug on mobile
+  docs(contributing): clarify commit message format
+  ```
 
-   Reporting bugs
-   - Search existing issues first.
-   - Provide: a clear title, reproduction steps, expected vs actual behavior, environment (OS, Node/npm, browser) and relevant logs or screenshots.
+### 3. Submitting a Pull Request (PR)
 
-   Feature requests
-   - Explain the problem, your proposed solution, and why it benefits the project.
-   - Include sketches, API suggestions, and notes about migration/compatibility if applicable.
+1.  **Pre-Submission Checklist:** Before opening a PR, ensure you have completed the following on your branch:
+    - [ ] Code is free of linting errors (`npm run lint`).
+    - [ ] All existing and new tests are passing (`npm run test`).
+    - [ ] The branch is up-to-date with the latest `main`.
+    - [ ] The code adheres to all standards outlined in `ARCHITECTURE.md` and `CODE_STYLE.md`.
 
-   Pull request checklist
-   - [ ] Follow the folder & naming conventions in `FOLDER_STRUCTURE.md`.
-   - [ ] Lint and format your code (`npm run lint`).
-   - [ ] Add or update tests for new behavior (`npm test`).
-   - [ ] Keep changes small and focused.
-   - [ ] Document public API or UX changes in README or docs.
+2.  **Opening the PR:**
+    - Push your feature branch to the remote repository.
+    - Open a pull request targeting the `main` branch.
+    - Use a clear and descriptive title.
+    - The PR description must follow the provided template, detailing the _what_ and _why_ of the changes.
 
-   Branching & commits
-   - Create descriptive branch names: `feature/`, `fix/`, `chore/`.
-   - Write clear commit messages. Use present tense and include the reason for the change.
-
-   Code review
-   - Reviews focus on clarity, tests, performance, security and accessibility.
-   - Maintain backwards compatibility where possible. If breaking changes are required, document them clearly.
-
-   Communication
-   - Use Issues for tracking bugs and feature requests.
-   - Use Discussions for design conversations and non-actionable ideas.
-
-   Code of conduct
-
-   This project follows a code of conduct. Please be respectful and inclusive. See `CODE_OF_CONDUCT.md` for details.
-
-   Security
-
-   Report security issues following the guidance in `SECURITY.md`.
-
-   Thanks for helping improve Chatty — we appreciate your time and effort.
+3.  **Code Review:**
+    - A PR requires at least one approval from a team member before it can be merged.
+    - Address all review comments and push your changes to the same branch.
+    - Once approved, the PR will be squashed and merged by a maintainer.

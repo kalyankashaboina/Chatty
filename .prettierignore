@@ -1,7 +1,21 @@
-node_modules
-dist
-logs
-build
-coverage
+# Ignore build output
+dist/
+build/
+node_modules/
+
+# Ignore generated files
+*.log
+*.lock
+
+# Ignore environment files
 .env
-.vscode
+.env.local
+.env.*.local
+
+# Ignore coverage
+coverage/
+
+# Ignore public assets
+public/**/*.svg
+public/**/*.png
+public/**/*.jpg
