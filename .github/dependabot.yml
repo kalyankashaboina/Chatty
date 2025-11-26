@@ -1,0 +1,23 @@
+version: 2
+updates:
+  # Check npm dependencies monthly for updates
+  - package-ecosystem: 'npm'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+      time: '03:00'
+    open-pull-requests-limit: 10
+    reviewers:
+      - 'kalyankashaboina'
+    labels:
+      - 'dependencies'
+      - 'npm'
+    # Auto-merge minor and patch updates
+    allow:
+      - dependency-type: 'direct'
+      - dependency-type: 'indirect'
+    # Commit message template
+    commit-message:
+      prefix: 'chore'
+      include: 'scope'

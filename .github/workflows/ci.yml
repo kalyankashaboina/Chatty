@@ -85,7 +85,6 @@ jobs:
     # needs: [code-quality, unit-tests]
     needs: [code-quality]
 
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -129,7 +128,7 @@ jobs:
             echo "❌ Code quality checks failed"
             exit 1
           fi
-       
+
           if [ "${{ needs.build.result }}" != "success" ]; then
             echo "❌ Build failed"
             exit 1
