@@ -11,7 +11,7 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "prepare": "husky && husky install",
+    "prepare": "husky install",
     "type-check": "tsc --noEmit",
     "test": "jest --coverage --watchAll=false",
     "test:watch": "jest --watchAll",
