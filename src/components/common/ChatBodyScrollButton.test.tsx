@@ -1,58 +1,76 @@
-// ChatBodyScrollButton.test.tsx
+import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import ChatBodyScrollButton from './ChatBodyScrollButton ';
 
-describe('ChatBodyScrollButton', () => {
-  const scrollToBottomMock = jest.fn();
-  const theme = createTheme();
+// 1. Setup a Theme Wrapper
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#7c3aed',
+      dark: '#5b21b6',
+    },
+  },
+});
 
-  const renderComponent = (showScrollButton: boolean) => {
-    return render(
-      <ThemeProvider theme={theme}>
-        <ChatBodyScrollButton
-          showScrollButton={showScrollButton}
-          scrollToBottom={scrollToBottomMock}
-        />
-      </ThemeProvider>,
-    );
-  };
+const renderWithTheme = (component: React.ReactNode) => {
+  return render(<ThemeProvider theme={theme}>{component}</ThemeProvider>);
+};
 
-  afterEach(() => {
+describe('ChatBodyScrollButton Component', () => {
+  const mockScrollToBottom = jest.fn();
+
+  beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  test('does not render button when showScrollButton is false', () => {
-    renderComponent(false);
-    const button = screen.queryByRole('button', { name: /scroll to bottom/i });
+  test('renders the button visible when showScrollButton is true', () => {
+    renderWithTheme(
+      <ChatBodyScrollButton showScrollButton={true} scrollToBottom={mockScrollToBottom} />,
+    );
+
+    const button = screen.getByRole('button', { name: /Scroll to Bottom/i });
+
+    // Check if it exists and is visible
+    expect(button).toBeInTheDocument();
+    expect(button).toBeVisible();
+  });
+
+  test('calls scrollToBottom function when clicked', () => {
+    renderWithTheme(
+      <ChatBodyScrollButton showScrollButton={true} scrollToBottom={mockScrollToBottom} />,
+    );
+
+    const button = screen.getByRole('button', { name: /Scroll to Bottom/i });
+
+    // Simulate Click
+    fireEvent.click(button);
+
+    // Verify callback
+    expect(mockScrollToBottom).toHaveBeenCalledTimes(1);
+  });
+
+  test('is not visible when showScrollButton is false', () => {
+    renderWithTheme(
+      <ChatBodyScrollButton showScrollButton={false} scrollToBottom={mockScrollToBottom} />,
+    );
+
+    // queryByRole returns NULL if the element is hidden
+    const button = screen.queryByRole('button', { name: /Scroll to Bottom/i });
+
+    // FIX: Use toBeInTheDocument() which handles null safely.
+    // Since queryByRole returned null (because it's hidden), this assertion passes.
     expect(button).not.toBeInTheDocument();
   });
 
-  test('renders button when showScrollButton is true', () => {
-    renderComponent(true);
-    const button = screen.getByRole('button', { name: /scroll to bottom/i });
-    expect(button).toBeInTheDocument();
-  });
+  test('applies theme styles correctly', () => {
+    renderWithTheme(
+      <ChatBodyScrollButton showScrollButton={true} scrollToBottom={mockScrollToBottom} />,
+    );
 
-  test('calls scrollToBottom when button is clicked', () => {
-    renderComponent(true);
-    const button = screen.getByRole('button', { name: /scroll to bottom/i });
-    fireEvent.click(button);
-    expect(scrollToBottomMock).toHaveBeenCalledTimes(1);
-  });
+    const button = screen.getByRole('button', { name: /Scroll to Bottom/i });
 
-  test('applies correct styles and animations', () => {
-    renderComponent(true);
-    const button = screen.getByRole('button', { name: /scroll to bottom/i });
-
-    // Check for initial styles
-    expect(button).toHaveStyle(`border-radius: 24px`);
-    expect(button).toHaveStyle(`text-transform: none`);
-    expect(button).toHaveStyle(`font-weight: bold`);
-
-    // Hover styles simulation
-    fireEvent.mouseOver(button);
-    // Can't assert animations directly in RTL; just ensure no crash on hover
-    fireEvent.mouseOut(button);
+    // Verify theme application
+    expect(button).toHaveStyle('background-color: rgb(124, 58, 237)');
   });
 });

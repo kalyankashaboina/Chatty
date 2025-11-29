@@ -1,5 +1,5 @@
 // src/components/ErrorBoundary.tsx
-import React, { Component, ReactNode } from 'react';
+import React, { Component, type ReactNode } from 'react';
 
 interface ErrorBoundaryProps {
   children: ReactNode; // Declare the children prop
