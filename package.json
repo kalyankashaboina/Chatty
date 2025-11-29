@@ -16,7 +16,7 @@
     "test:watch": "jest --watchAll",
     "test:ci": "jest --coverage",
     "prepare": "test \"$CI\" = \"true\" || husky install",
-     "update:packages": "npx npm-check-updates -u && npm install && npm audit fix"
+    "update:packages": "npx npm-check-updates -u && npm install && npm audit fix"
   },
   "dependencies": {
     "@emotion/react": "11.14.0",
@@ -70,14 +70,17 @@
     "vite-plugin-pwa": "1.2.0",
     "npm-check-updates": "19.1.2"
   },
-"lint-staged": {
-  "*.{js,jsx,ts,tsx}": [
-    "eslint --fix",
-    "prettier --write",
-    "jest --bail --findRelatedTests"
-  ],
-  "*.module.css": [
-    "prettier --write"
-  ]
-}
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write",
+      "jest --bail --findRelatedTests"
+    ],
+    "*.module.css": [
+      "prettier --write"
+    ],
+    "*.{json,md}": [
+      "prettier --write"
+    ]
+  }
 }
