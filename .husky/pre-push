@@ -1,4 +1,9 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
+echo "🚀 Running pre-push checks..."
 
-npm run test:ci && npm audit --audit-level=moderate
+# Run full Jest tests
+npm run test:ci
+
+# Run security audit
+npm audit --audit-level=moderate
+
+echo "✅ Pre-push checks complete!"
